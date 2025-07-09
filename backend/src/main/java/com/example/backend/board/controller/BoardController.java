@@ -1,23 +1,42 @@
 package com.example.backend.board.controller;
 
 import com.example.backend.board.dto.BoardDto;
+import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
-@Controller
+//@Controller
+//@ResponseBody
+@RestController // Controller + ResponseBody
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
 
+    @GetMapping("{id}")
+    public BoardDto getBoard(@PathVariable Integer id) {
+        return boardService.getBoardById(id);
+    }
+
+
+    @GetMapping("list")
+    public List<BoardListInfo> getAllBoards() {
+        System.out.println("BoardController.getAllBoards");
+
+        boardService.list();
+
+        return null;
+    }
+
+
     @PostMapping("add")
-    @ResponseBody
     public ResponseEntity<Object> add(@RequestBody BoardDto dto) {
 
 
@@ -36,8 +55,7 @@ public class BoardController {
             return ResponseEntity.badRequest().body(Map.of(
                     "message", Map.of(
                             "type", "error",
-                            "text", "입력한 내용이 유효하지 않습니다"
-                    )));
+                            "text", "입력한 내용이 유효하지 않습니다.")));
         }
     }
 }

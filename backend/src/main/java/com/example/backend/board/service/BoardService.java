@@ -6,7 +6,10 @@ import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.board.dto.BoardDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,30 @@ public class BoardService {
             return false;
         }
 
+        if (dto.getContent() == null || dto.getContent().trim().isBlank()) {
+            return false;
+        }
+
+        if (dto.getAuthor() == null || dto.getAuthor().trim().isBlank()) {
+            return false;
+        }
+
         return true;
+    }
+
+    public void list() {
+        boardRepository.findAllByOrderByIdDesc();
+    }
+
+    public BoardDto getBoardById(Integer id) {
+        Board board = boardRepository.findById(id).get();
+        BoardDto dto = new BoardDto();
+        dto.setId(board.getId());
+        dto.setTitle(board.getTitle());
+        dto.setContent(board.getContent());
+        dto.setAuthor(board.getAuthor());
+        dto.setInsertedAt(board.getInsertedAt());
+
+        return dto;
     }
 }

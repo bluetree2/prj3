@@ -39,6 +39,7 @@ export function BoardAdd() {
         console.log("잘됨");
       })
       .catch((err) => {
+        console.log(err);
         console.log("잘 안됨");
         const message = err.response.data.message;
         // console.log(message);
@@ -103,7 +104,7 @@ export function BoardAdd() {
             onClick={handleSaveButtonClick}
             disabled={isProcessing || !validata}
           >
-            {isProcessing && <Spinner />}
+            {isProcessing && <Spinner size="sm" />}
             {isProcessing || "저장"}
           </Button>
         </div>
