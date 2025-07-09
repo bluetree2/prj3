@@ -1,10 +1,12 @@
 package com.example.backend;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/board")
+@RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
