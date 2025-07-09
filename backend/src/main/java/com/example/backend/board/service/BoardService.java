@@ -33,14 +33,17 @@ public class BoardService {
 
     public boolean validate(BoardDto dto) {
         if (dto.getTitle() == null || dto.getTitle().trim().isBlank()) {
+            System.out.println(dto.getTitle());
             return false;
         }
 
         if (dto.getContent() == null || dto.getContent().trim().isBlank()) {
+            System.out.println(dto.getContent());
             return false;
         }
 
         if (dto.getAuthor() == null || dto.getAuthor().trim().isBlank()) {
+            System.out.println(dto.getAuthor());
             return false;
         }
 
@@ -64,4 +67,22 @@ public class BoardService {
     }
 
 
+    public void deleteById(Integer id) {
+        boardRepository.deleteById(id);
+    }
+
+    public void update(BoardDto dto) {
+        //조회  
+        Board board = boardRepository.findById(dto.getId()).get();
+
+        // 변경
+        board.setTitle(dto.getTitle());
+        board.setContent(dto.getContent());
+        board.setAuthor(dto.getAuthor());
+
+        // 저장
+        boardRepository.save(board);
+
+
+    }
 }

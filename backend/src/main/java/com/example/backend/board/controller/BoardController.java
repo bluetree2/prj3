@@ -20,6 +20,34 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateBoard(@PathVariable Integer id, @RequestBody BoardDto dto) {
+
+        boolean result = boardService.validate(dto);
+
+        if (result) {
+            boardService.update(dto);
+
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "success", "text", id + "번 게시물이 수정 되었습니다.")
+            ));
+
+        } else {
+            System.out.println("result : " + result);
+            System.out.println("dto : " + dto);
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error", "text", "입력한 내용이 유효하지 않습니다.")));
+        }
+
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Integer id) {
+        boardService.deleteById(id);
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success", "text", id + "번 게시물이 삭제 되었습니다.")));
+    }
+
     @GetMapping("{id}")
     public BoardDto getBoard(@PathVariable Integer id) {
         return boardService.getBoardById(id);
@@ -29,13 +57,13 @@ public class BoardController {
     @GetMapping("list")
     public List<BoardListInfo> getAllBoards() {
         System.out.println("BoardController.getAllBoards");
-        
+
         return boardService.list();
     }
 
 
     @PostMapping("add")
-    public ResponseEntity<Object> add(@RequestBody BoardDto dto) {
+    public ResponseEntity<?> add(@RequestBody BoardDto dto) {
 
 
         // 값들이 유효한지 확인
