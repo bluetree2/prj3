@@ -7,6 +7,7 @@ import {
   Col,
   FormControl,
   FormGroup,
+  FormLabel,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -72,10 +73,10 @@ export function BoardDetail() {
             </FormGroup>
           </div>
           <div>{/*  수정 삭제 버튼*/}</div>
-          <Button className="me-2" variant="ouitline-danger">
+          <Button className="me-2" variant="outline-danger">
             삭제
           </Button>
-          <Button variant="oiutline-info">수정</Button>
+          <Button variant="outline-info">수정</Button>
         </Col>
       </Row>
     );

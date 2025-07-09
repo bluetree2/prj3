@@ -2,6 +2,7 @@ package com.example.backend.board.service;
 
 
 import com.example.backend.Board;
+import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.board.dto.BoardDto;
 import jakarta.transaction.Transactional;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,8 +47,8 @@ public class BoardService {
         return true;
     }
 
-    public void list() {
-        boardRepository.findAllByOrderByIdDesc();
+    public List<BoardListInfo> list() {
+        return boardRepository.findAllByOrderByIdDesc();
     }
 
     public BoardDto getBoardById(Integer id) {
@@ -60,4 +62,6 @@ public class BoardService {
 
         return dto;
     }
+
+
 }

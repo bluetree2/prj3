@@ -12,6 +12,8 @@ export function BoardList() {
       .get("/api/board/list")
       .then((res) => {
         console.log("잘됨");
+        console.log(res);
+        console.log(res.data);
         setBoarList(res.data);
       })
       .catch((err) => {
@@ -38,7 +40,7 @@ export function BoardList() {
     <Row>
       <Col>
         <h2 className="md-4">글 목록</h2>
-        {boarList.Length > 0 ? (
+        {boarList.length > 0 ? (
           // todo : table
           <Table striped={true} hover={true}>
             <thead>
@@ -60,7 +62,7 @@ export function BoardList() {
               </tr>
             </thead>
             <tbody>
-              {BoardList.map((board) => (
+              {boarList.map((board) => (
                 <tr
                   key={board.id}
                   style={{ cursor: "pointer" }}
@@ -69,7 +71,9 @@ export function BoardList() {
                   <td>{board.id}</td>
                   <td>{board.title}</td>
                   <td className="d-none d-md-table-cell">{board.author}</td>
-                  <td className="d-none d-lg-table-cell">{board.date}</td>
+                  <td className="d-none d-lg-table-cell">
+                    {board.dateTimeAgo}
+                  </td>
                 </tr>
               ))}
             </tbody>

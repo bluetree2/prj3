@@ -29,10 +29,8 @@ public class BoardController {
     @GetMapping("list")
     public List<BoardListInfo> getAllBoards() {
         System.out.println("BoardController.getAllBoards");
-
-        boardService.list();
-
-        return null;
+        
+        return boardService.list();
     }
 
 
