@@ -52,7 +52,11 @@ function BoardAdd() {
     <div>
       <h3>글 작성</h3>
       <div>
-        <input type="text" value={title} />
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
       </div>
       <div>
         <textarea
@@ -68,7 +72,7 @@ function BoardAdd() {
         <input
           type="text"
           value={author}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => setAuthor(e.target.value)}
         />
       </div>
       <div>
@@ -82,9 +86,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout />} />
-        <Route index element={<BoardList />} />
-        <Route path="board/add" element={<BoardAdd />} />
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<BoardList />} />
+          <Route path="board/add" element={<BoardAdd />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
