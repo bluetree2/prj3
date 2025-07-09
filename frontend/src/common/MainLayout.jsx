@@ -1,15 +1,17 @@
 import { Link, Outlet } from "react-router";
+import { AppNavBar } from "./AppNavBar.jsx";
+import { Container, Nav, Navbar } from "react-bootstrap";
 
 export function MainLayout() {
   return (
     <div>
-      <div>
-        navbar
-        <Link to="/">HOME</Link>
-        <Link to="/board/add">글쓰기</Link>
+      <div className="mb-3">
+        <AppNavBar />
       </div>
       <div>
-        <Outlet />
+        <Container>
+          <Outlet />
+        </Container>
       </div>
     </div>
   );

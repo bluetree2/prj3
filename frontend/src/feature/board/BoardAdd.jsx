@@ -1,16 +1,27 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 
 export function BoardAdd() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const navigate = useNavigate();
 
   function handleSaveButtonClick() {
+    setIsProcessing(true);
     axios
       .post("/api/board/add", {
         title: title,
@@ -19,58 +30,69 @@ export function BoardAdd() {
       })
       .then((res) => {
         const message = res.data.message;
-        console.log(message);
         if (message) {
           // toast 띄우기
           toast(message.text, { type: message.type });
         }
-        Navigate("/");
+        navigate("/");
         // "/"로 이동
         console.log("잘됨");
       })
       .catch((err) => {
         console.log("잘 안됨");
         const message = err.response.data.message;
-        console.log(message);
+        // console.log(message);
         if (message) {
+          // toast 띄우기
           toast(message.text, { type: message.type });
         }
       })
       .finally(() => {
         console.log("무조건 실행");
+        setIsProcessing(false);
       });
   }
 
   return (
-    <div>
-      <h3>글 작성</h3>
-      <div>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-      <div>
-        <textarea
-          name=""
-          id=""
-          cols="30"
-          rows="10"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        ></textarea>
-      </div>
-      <div>
-        <input
-          type="text"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-        />
-      </div>
-      <div>
-        <button onClick={handleSaveButtonClick}>저장</button>
-      </div>
-    </div>
+    <Row className="justify-content-center">
+      <Col xs={12} md={8} lg={6}>
+        <h2 className="mb-4">글 작성</h2>
+        <div>
+          <FormGroup className="mb-3" controlId="title1">
+            <FormLabel>제목</FormLabel>
+            <FormControl
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="content1">
+            <FormLabel>본문</FormLabel>
+            <FormControl
+              as="textarea"
+              rows={6}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>작성자</FormLabel>
+            <FormControl
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+            />
+          </FormGroup>
+        </div>
+        <div className="mb-3">
+          <Button onClick={handleSaveButtonClick}>
+            {isProcessing && <Spinner />}
+            {isProcessing || "저장"}
+          </Button>
+        </div>
+      </Col>
+    </Row>
   );
 }

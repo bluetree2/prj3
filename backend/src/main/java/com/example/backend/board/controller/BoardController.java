@@ -19,10 +19,15 @@ public class BoardController {
     @PostMapping("add")
     @ResponseBody
     public ResponseEntity<Object> add(@RequestBody BoardDto dto) {
+
+
+//        Thread.sleep(3000);
+
+
         // 값들이 유효한지 확인
         boolean result = boardService.validate(dto);
 
-        if (!result) {
+        if (result) {
 
 
             // service 에게 넘겨서 일 시키기
