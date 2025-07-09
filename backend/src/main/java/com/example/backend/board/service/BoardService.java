@@ -1,6 +1,9 @@
-package com.example.backend;
+package com.example.backend.board.service;
 
 
+import com.example.backend.Board;
+import com.example.backend.board.repository.BoardRepository;
+import com.example.backend.board.dto.BoardDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,5 +24,13 @@ public class BoardService {
 
         //repository에 save실행
         boardRepository.save(board);
+    }
+
+    public boolean validate(BoardDto dto) {
+        if (dto.getTitle() == null || dto.getTitle().trim().isBlank()) {
+            return false;
+        }
+
+        return true;
     }
 }
