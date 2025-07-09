@@ -53,6 +53,18 @@ export function BoardAdd() {
       });
   }
 
+  // 작성자, 제목, 본문 썻는지
+  let validata = true;
+  if (title.trim() === "") {
+    validata = false;
+  }
+  if (content.trim() === "") {
+    validata = false;
+  }
+  if (author.trim() === "") {
+    validata = false;
+  }
+
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
@@ -87,7 +99,10 @@ export function BoardAdd() {
           </FormGroup>
         </div>
         <div className="mb-3">
-          <Button onClick={handleSaveButtonClick}>
+          <Button
+            onClick={handleSaveButtonClick}
+            disabled={isProcessing || !validata}
+          >
             {isProcessing && <Spinner />}
             {isProcessing || "저장"}
           </Button>
