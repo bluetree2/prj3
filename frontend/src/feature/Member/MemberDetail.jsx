@@ -1,4 +1,12 @@
-import { Col, FormControl, FormGroup, Row, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router";
@@ -42,11 +50,9 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         <div>
-          <Button
-            variant={"outline-danger"}
-            size={"sm"}
-            className={"me-2"}
-          ></Button>
+          <Button variant={"outline-danger"} size={"sm"} className={"me-2"}>
+            회원 탈퇴
+          </Button>
           <Button variant={"outline-info"}>수정</Button>
         </div>
       </Col>
