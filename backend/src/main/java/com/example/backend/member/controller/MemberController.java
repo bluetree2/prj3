@@ -38,7 +38,6 @@ public class MemberController {
     }
 
     @GetMapping("list")
-    //todo form 수정
     public List<MemberListInfo> getAllMembers() {
         return memberService.list();
     }
