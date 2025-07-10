@@ -43,7 +43,7 @@ public class MemberController {
         return memberService.list();
     }
 
-    @GetMapping("email")
+    @GetMapping(params = "email")
     public MemberDto getemail(String email) {
         return memberService.get(email);
     }
