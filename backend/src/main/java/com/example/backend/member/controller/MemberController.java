@@ -48,4 +48,22 @@ public class MemberController {
         return memberService.get(email);
     }
 
+    @DeleteMapping()
+    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm) {
+        System.out.println("memberForm = " + memberForm);
+        try {
+            memberService.delete(memberForm);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(401).body(
+                    Map.of("message", Map.of("type", "error", "text", message)));
+        }
+
+        return ResponseEntity.ok().body(
+                Map.of("message", Map.of("type", "success", "text", "탈퇴가 완료되었습니다")));
+
+    }
+
 }

@@ -6,6 +6,7 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,5 +85,14 @@ public class MemberService {
         return member;
 
 
+    }
+
+    public void delete(MemberForm memberForm) {
+        Member db = memberRepository.findById(memberForm.getEmail()).get();
+        if (db.getPassword().equals(memberForm.getPassword())) {
+            memberRepository.delete(db);
+        } else {
+            throw new RuntimeException("함호가 일치하지 않습니다");
+        }
     }
 }

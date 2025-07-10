@@ -10,13 +10,16 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 
 export function MemberDetail() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
   const [modalShow, setModalShow] = useState(false);
-  const [password, setPassword] = useState();
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -38,19 +41,24 @@ export function MemberDetail() {
 
   function handeDeleteButtonClick() {
     axios
-      // todo : params
       .delete(`/api/member`, {
         data: { email: member.email, password: password },
       })
       .then((res) => {
         console.log("good");
+        const message = res.data.message;
+        toast(message.text, { type: message.type });
+        navigate("/");
       })
       .catch((err) => {
         console.log("bad");
+        const message = err.response.data.message;
+        toast(message.text, { type: message.type });
       })
       .finally(() => {
         console.log("always");
         setModalShow(false);
+        setPassword("");
       });
   }
 
@@ -92,7 +100,7 @@ export function MemberDetail() {
             <FormControl
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target)}
+              onChange={(e) => setPassword(e.target.value)}
             ></FormControl>
           </FormGroup>
         </Modal.Body>
@@ -102,7 +110,7 @@ export function MemberDetail() {
             취소
           </Button>
           <Button variant="danger" onClick={handeDeleteButtonClick}>
-            xkfxhl
+            탈퇴
           </Button>
         </Modal.Footer>
       </Modal>
