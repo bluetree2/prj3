@@ -1,9 +1,9 @@
 CREATE TABLE board
 (
     id          INT AUTO_INCREMENT NOT NULL,
-    title       VARCHAR(300)       NOT NULL ,
-    content     VARCHAR(10000)       NOT NULL ,
-    author      VARCHAR(255)       NOT NULL ,
+    title       VARCHAR(300)       NOT NULL,
+    content     VARCHAR(10000)     NOT NULL,
+    author      VARCHAR(255)       NOT NULL,
     inserted_at datetime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_board PRIMARY KEY (id)
 );
@@ -12,10 +12,12 @@ CREATE TABLE board
 
 CREATE TABLE member
 (
-    email       VARCHAR(255) NOT NULL,
-    password    VARCHAR(255) NOT NULL,
-    nick_name   VARCHAR(255) NOT NULL,
+    email       VARCHAR(255)  NOT NULL,
+    password    VARCHAR(255)  NOT NULL,
+    nick_name   VARCHAR(255)  NOT NULL Unique ,
     info        VARCHAR(3000) NULL,
-    inserted_at   VARCHAR(255) NOT NULL default NOW(),
+    inserted_at datetime      NOT NULL default NOW(),
     constraint pk_member PRIMARY KEY (email)
 )
+
+drop table member;

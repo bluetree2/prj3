@@ -7,6 +7,8 @@ import {
   Row,
 } from "react-bootstrap";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export function MemberAdd() {
   const [email, setEmail] = useState();
@@ -25,9 +27,17 @@ export function MemberAdd() {
       })
       .then((res) => {
         console.log("good");
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
       })
       .catch((err) => {
         console.log("bad");
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
       })
       .finally(() => console.log("always"));
   }
@@ -47,7 +57,7 @@ export function MemberAdd() {
           </FormGroup>
         </div>
         <div>
-          <FormGroup controlId="password1">
+          <FormGroup className="mb-3" controlId="password1">
             <FormLabel>암호</FormLabel>
             {/*type는 password인데 보이도록 text로 둠*/}
             <FormControl
@@ -58,7 +68,7 @@ export function MemberAdd() {
           </FormGroup>
         </div>
         <div>
-          <FormGroup controlId="password2">
+          <FormGroup className="mb-3" controlId="password2">
             {/*todo 나중에 적용*/}
             <FormLabel>암호 확인</FormLabel>
             <FormControl
@@ -71,7 +81,9 @@ export function MemberAdd() {
         </div>
         <div>
           <FormGroup>
-            <FormLabel controlId="nickname1">별명</FormLabel>
+            <FormLabel className="mb-3" controlId="nickname1">
+              별명
+            </FormLabel>
             <FormControl
               type={"text"}
               value={nickname}
@@ -82,7 +94,9 @@ export function MemberAdd() {
         </div>
         <div>
           <FormGroup>
-            <FormLabel controlId="info1">자기소개</FormLabel>
+            <FormLabel className="mb-3" controlId="info1">
+              자기소개
+            </FormLabel>
             <FormControl
               as={"textarea"}
               rows={6}
