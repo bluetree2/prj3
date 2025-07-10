@@ -97,7 +97,6 @@ export function MemberAdd() {
         </div>
         <div>
           <FormGroup className="mb-3" controlId="password2">
-            {/*todo 나중에 적용*/}
             <FormLabel>암호 확인</FormLabel>
             <FormControl
               type="password"

@@ -41,7 +41,6 @@ export function BoardList() {
       <Col>
         <h2 className="md-4">글 목록</h2>
         {boarList.length > 0 ? (
-          // todo : table
           <Table striped={true} hover={true}>
             <thead>
               <tr>

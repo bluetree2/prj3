@@ -1,17 +1,31 @@
-import {Col, FormControl, FormGroup, FormLabel, Row} from "react-bootstrap";
-import { useSearchParams } from "react-router";
-import {useEffect, useState} from "react";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
+import { useNavigate, useSearchParams } from "react-router";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export function MemberEdit() {
   const [params] = useSearchParams();
-  const [nickName, setNickName] = useState()
-  const [info, setInfo] = useState()
+  const [member, setMember] = useState(null);
+  const [password, setPassword] = useState("");
+  const [modalShow, setModalShow] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get(`/api/member?email=${params.get("email")}`)
       .then((res) => {
         console.log("good");
+        setMember(res.data);
       })
       .catch((err) => {
         console.log("bad");
@@ -21,7 +35,35 @@ export function MemberEdit() {
       });
   }, []);
 
-  if ()
+  if (!member) {
+    return <Spinner />;
+  }
+
+  function handleSaveButtonClick() {
+    axios
+      .put(`/api/member`, { ...member, password: password })
+      .then((res) => {
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate(`/member?email=${member.email}`);
+      })
+      .catch((err) => {
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .finally(() => {
+        setModalShow(false);
+        setPassword("");
+      });
+  }
+
+  if (!member) {
+    return <Spinner />;
+  }
 
   return (
     <Row className={"justify-content-center"}>
@@ -30,7 +72,7 @@ export function MemberEdit() {
         <div>
           <FormGroup controlId="email1" className="mb-3">
             <FormLabel>이메일</FormLabel>
-            <FormControl readOnly value={member.email} />
+            <FormControl disabled value={member.email} />
           </FormGroup>
         </div>
         <div>
@@ -38,7 +80,10 @@ export function MemberEdit() {
             <FormLabel>별명</FormLabel>
             <FormControl
               value={member.nickName}
-              onChange={e => setMember({...member, nickName: e.target.value})}/>
+              onChange={(e) =>
+                setMember({ ...member, nickName: e.target.value })
+              }
+            />
           </FormGroup>
         </div>
         <div>
@@ -47,7 +92,8 @@ export function MemberEdit() {
             <FormControl
               as={"textarea"}
               value={member.info}
-              onChange={(e) => setMember({ ...member, info: e.target.value })}/>
+              onChange={(e) => setMember({ ...member, info: e.target.value })}
+            />
           </FormGroup>
         </div>
         <div>
@@ -55,12 +101,57 @@ export function MemberEdit() {
             <FormLabel>가입일시</FormLabel>
             <FormControl
               type="datetime-local"
-              readOnly
+              disabled
               value={member.insertedAt}
             />
           </FormGroup>
         </div>
+        <div>
+          <Button
+            className="me-2"
+            variant={"outline-secondart"}
+            onClick={() => navigate(-1)}
+          >
+            취소
+          </Button>
+          <Button variant="primary" onClick={() => setModalShow(true)}>
+            저장
+          </Button>
+        </div>
       </Col>
+
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 정보 변경 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup controlId={"password1"} className={"mb-3"}>
+            <FormLabel>암호</FormLabel>
+            <FormControl
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            className="me-2"
+            variant="outline-dark"
+            onClick={() => setModalShow(false)}
+          >
+            취소
+          </Button>
+          <Button
+            className="me-2"
+            variant="primaryq"
+            onClick={handleSaveButtonClick}
+          >
+            저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

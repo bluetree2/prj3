@@ -66,4 +66,23 @@ public class MemberController {
 
     }
 
+    @PutMapping()
+    public ResponseEntity<?> updateMember(@RequestBody MemberForm memberForm) {
+        System.out.println("memberForm = " + memberForm);
+
+        try {
+            memberService.update(memberForm);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(401).body(
+                    Map.of("message", Map.of("type", "error", "text", message)));
+        }
+
+        return ResponseEntity.ok().body(
+                Map.of("message", Map.of("type", "success", "text", "수정이 완료되었습니다")));
+
+    
+    }
+
 }

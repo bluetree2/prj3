@@ -73,6 +73,12 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         <div>
+          <FormGroup controlId={"nickName1"} className={"mb-3"}>
+            <FormLabel>닉네임</FormLabel>
+            <FormControl readOnly value={member.nickName} />
+          </FormGroup>
+        </div>
+        <div>
           <FormGroup controlId={"info1"} className={"mb-3"}>
             <FormLabel>자기소개</FormLabel>
             <FormControl as={"textarea"} readOnly value={member.info} />
@@ -80,7 +86,7 @@ export function MemberDetail() {
         </div>
         <div>
           <FormGroup controlId={"inserted1"} className={"mb-3"}>
-            <FormLabel>가입잀시</FormLabel>
+            <FormLabel>가입일시</FormLabel>
             <FormControl
               type="datetime-local"
               readOnly
@@ -98,8 +104,10 @@ export function MemberDetail() {
             회원 탈퇴
           </Button>
           <Button
+            size="sm"
+            className={"me-2"}
             variant={"outline-info"}
-            onClick={() => navigate(`/member/edit?id=${member.email}`)}
+            onClick={() => navigate(`/member/edit?email=${member.email}`)}
           >
             수정
           </Button>
