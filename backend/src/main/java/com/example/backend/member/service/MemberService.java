@@ -85,4 +85,9 @@ public class MemberService {
 
 
     }
+
+    public void deleteByEmail(String email) {
+        Member db = memberRepository.findById(email).get();
+        memberRepository.delete(db);
+    }
 }

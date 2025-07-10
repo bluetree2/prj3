@@ -48,4 +48,14 @@ public class MemberController {
         return memberService.get(email);
     }
 
+    @DeleteMapping("{email}")
+    public ResponseEntity<?> delete(@PathVariable String email) {
+        System.out.println("email = " + email);
+
+        memberService.deleteByEmail(email);
+
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success", "text", "탈퇴가 완료되었습니다.")));
+    }
+
 }
