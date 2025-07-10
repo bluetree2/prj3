@@ -1,4 +1,11 @@
-import { Col, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Row,
+} from "react-bootstrap";
 import { useState } from "react";
 
 export function MemberAdd() {
@@ -34,6 +41,7 @@ export function MemberAdd() {
             <FormLabel>이메일</FormLabel>
             <FormControl
               type={"email"}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormGroup>
@@ -43,7 +51,8 @@ export function MemberAdd() {
             <FormLabel>암호</FormLabel>
             {/*type는 password인데 보이도록 text로 둠*/}
             <FormControl
-              type={"password1"}
+              type={"text"}
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormGroup>
@@ -53,8 +62,9 @@ export function MemberAdd() {
             {/*todo 나중에 적용*/}
             <FormLabel>암호 확인</FormLabel>
             <FormControl
-              type={"password1"}
-              onChange={(e) => setPassword(e.target.value)}
+              type="text"
+
+              // onChange={(e) => setPassword(e.target.value)}
             />
             <FormControl type={"password2"} />
           </FormGroup>
@@ -63,7 +73,8 @@ export function MemberAdd() {
           <FormGroup>
             <FormLabel controlId="nickname1">별명</FormLabel>
             <FormControl
-              type={"password1"}
+              type={"text"}
+              value={nickname}
               onChange={(e) => setNickname(e.target.value)}
             />
             <FormControl type={"nickname1"} />
@@ -73,10 +84,12 @@ export function MemberAdd() {
           <FormGroup>
             <FormLabel controlId="info1">자기소개</FormLabel>
             <FormControl
-              type={"password1"}
+              as={"textarea"}
+              rows={6}
+              value={info}
               onChange={(e) => setInfo(e.target.value)}
             />
-            <FormControl as={"textarea"} rows={6} />
+            <FormControl />
           </FormGroup>
         </div>
         <div>
