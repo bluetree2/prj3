@@ -1,5 +1,6 @@
 package com.example.backend.member.service;
 
+import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.dto.MemberForm;
@@ -30,7 +31,6 @@ public class MemberService {
             member.setInfo(memberForm.getInfo());
             member.setNickName(memberForm.getNickName());
 
-            System.out.println("member = " + member);
             memberRepository.save(member);
         }
 
@@ -69,5 +69,20 @@ public class MemberService {
 
     public List<MemberListInfo> list() {
         return memberRepository.findAllBy();
+    }
+
+    public MemberDto get(String email) {
+        Member db = memberRepository.findById(email).get();
+
+        MemberDto member = new MemberDto();
+        member.setNickName(db.getNickName());
+        member.setInfo(db.getInfo());
+        member.setEmail(db.getEmail());
+        member.setInsertedAt(db.getInsertedAt());
+
+
+        return member;
+
+
     }
 }

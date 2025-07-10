@@ -1,5 +1,6 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.service.MemberService;
@@ -38,8 +39,13 @@ public class MemberController {
     }
 
     @GetMapping("list")
-    public List<MemberListInfo> getAllMembers() {
+    public List<MemberListInfo> list() {
         return memberService.list();
+    }
+
+    @GetMapping("email")
+    public MemberDto getemail(String email) {
+        return memberService.get(email);
     }
 
 }
