@@ -18,14 +18,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public void add(MemberFrom memberFrom) {
+
+        System.out.println("memberFrom = " + memberFrom);
+
         if (this.validate(memberFrom)) {
-
             Member member = new Member();
-            member.setEmail(member.getEmail());
-            member.setPassword(member.getPassword());
-            member.setInfo(member.getInfo());
-            member.setNickName(member.getNickName());
+            member.setEmail(memberFrom.getEmail());
+            member.setPassword(memberFrom.getPassword());
+            member.setInfo(memberFrom.getInfo());
+            member.setNickName(memberFrom.getNickName());
 
+            System.out.println("member = " + member);
             memberRepository.save(member);
         }
 
@@ -57,8 +60,8 @@ public class MemberService {
         }
         // password 여부
         if (memberFrom.getNickName() == null || memberFrom.getNickName().trim().isBlank()) {
-            throw new RuntimeException("");
+            throw new RuntimeException("별명을 입력해야 합니다");
         }
-        return false;
+        return true;
     }
 }
