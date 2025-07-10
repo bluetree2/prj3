@@ -17,17 +17,21 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public String add(MemberFrom memberFrom) {
-        Member member = new Member();
-        member.setEmail(member.getEmail());
-        member.setPassword(member.getPassword());
-        member.setInfo(member.getInfo());
-        member.setNickName(member.getNickName());
+    public void add(MemberFrom memberFrom) {
+        if (this.validate(memberFrom)) {
 
-        memberRepository.save(member);
+            Member member = new Member();
+            member.setEmail(member.getEmail());
+            member.setPassword(member.getPassword());
+            member.setInfo(member.getInfo());
+            member.setNickName(member.getNickName());
+
+            memberRepository.save(member);
+        }
+
     }
 
-    private void validate(MemberFrom memberFrom) {
+    private boolean validate(MemberFrom memberFrom) {
         //email 중복여부
         Optional<Member> db1 = memberRepository.findById(memberFrom.getEmail());
         if (db1.isPresent()) {
@@ -55,5 +59,6 @@ public class MemberService {
         if (memberFrom.getNickName() == null || memberFrom.getNickName().trim().isBlank()) {
             throw new RuntimeException("");
         }
+        return false;
     }
 }

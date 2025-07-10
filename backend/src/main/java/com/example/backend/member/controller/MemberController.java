@@ -31,10 +31,10 @@ public class MemberController {
 
         return ResponseEntity.ok().body(
                 Map.of("message", Map.of(
-                        "type","success",
+                        "type", "success",
                         "text", "회원 가입 되었습니다."
                 ))
-        )
+        );
     }
 
 }
