@@ -8,10 +8,32 @@ import { MemberAdd } from "./feature/Member/MemberAdd.jsx";
 import { MemberList } from "./feature/Member/MemberList.jsx";
 import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
+import axios from "axios";
 
 function App() {
+  function handleButton1Click() {
+    axios
+      .post("/api/learn/jwt/sub1", {
+        email: "son@son.com",
+        password: "pwd",
+      })
+      .then((res) => {
+        console.log(res.data);
+        localStorage.setItem("token", res.data);
+      });
+  }
+
+  function handleButton2Click() {
+    localStorage.removeItem("token");
+  }
+
   return (
-    <BrowserRouter>
+    <div>
+      <h3>jwt 로그인 연습</h3>
+      <button onClick={handleButton2Click}> 2. token 지우기 (logout)</button>
+      <button onClick={handleButton1Click}> 1. token 얻기 (login)</button>
+    </div>
+    /*<BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<BoardList />} />
@@ -24,7 +46,7 @@ function App() {
           <Route path="member/edit" element={<MemberEdit />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>*/
   );
 }
 
