@@ -1,11 +1,13 @@
-import { Children, createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 // 유효기간을 넘김 토큰 삭제
 // const token = jwtDecode(localStorage.getItem("token"));
 const token = localStorage.getItem("token");
+console.log(token);
 if (token) {
+  console.log("123");
   const decoded = jwtDecode(token);
   const exp = decoded.exp;
   if (exp * 1000 < Date.now()) {
@@ -25,6 +27,7 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
+// step1. create context
 const AuthenticationContext = createContext(null);
 
 export function AuthenticationContextProvider({ children }) {

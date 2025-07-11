@@ -26,7 +26,7 @@ public class MemberController {
         try {
             String token = memberService.getToken(LoginForm);
             return ResponseEntity.ok().body(
-                    Map.of("toekn", token,
+                    Map.of("token", token,
                             "message", Map.of(
                                     "type", "success",
                                     "text", "로그인 되었습니다."

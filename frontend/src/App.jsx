@@ -13,11 +13,6 @@ import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
 import { createContext } from "react";
 import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
 
-// step1. create context
-const AuthenticationContext = createContext(null);
-
-// step2.
-
 function App() {
   return (
     <AuthenticationContextProvider>

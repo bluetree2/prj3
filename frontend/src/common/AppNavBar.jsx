@@ -29,9 +29,11 @@ export function AppNavBar() {
                   회원가입
                 </Nav.Link>
               )}
-              <Nav.Link as={NavLink} to="/Member/list">
-                회원목록
-              </Nav.Link>
+              {user !== null && (
+                <Nav.Link as={NavLink} to="/Member/list">
+                  회원목록
+                </Nav.Link>
+              )}
               {user === null && (
                 <Nav.Link as={NavLink} to="/login ">
                   로그인
