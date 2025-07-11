@@ -8,6 +8,8 @@ import { MemberAdd } from "./feature/Member/MemberAdd.jsx";
 import { MemberList } from "./feature/Member/MemberList.jsx";
 import { MemberDetail } from "./feature/Member/MemberDetail.jsx";
 import { MemberEdit } from "./feature/Member/MemberEdit.jsx";
+import { MemberLogin } from "./feature/Member/MemberLogin.jsx";
+import { MemberLogout } from "./feature/Member/MemberLogout.jsx";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="board/:id" element={<BoardDetail />} />
           <Route path="board/edit" element={<BoardEdit />} />
           <Route path="/signup" element={<MemberAdd />} />
+          <Route path="/login" element={<MemberLogin />} />
+          <Route path="/logout" element={<MemberLogout />} />
           <Route path="member/list" element={<MemberList />} />
           <Route path="member" element={<MemberDetail />} />
           <Route path="member/edit" element={<MemberEdit />} />

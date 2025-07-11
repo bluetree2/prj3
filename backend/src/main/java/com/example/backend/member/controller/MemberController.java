@@ -1,9 +1,6 @@
 package com.example.backend.member.controller;
 
-import com.example.backend.member.dto.ChangePasswordForm;
-import com.example.backend.member.dto.MemberDto;
-import com.example.backend.member.dto.MemberForm;
-import com.example.backend.member.dto.MemberListInfo;
+import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +15,29 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody MemberLoginForm LoginForm) {
+        System.out.println("memberForm = " + LoginForm);
+
+        try {
+            String token = memberService.getToken(LoginForm);
+            return ResponseEntity.ok().body(
+                    Map.of("toekn", token,
+                            "message", Map.of(
+                                    "type", "success",
+                                    "text", "로그인 되었습니다."
+                            ))
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(401).body(
+                    Map.of("message", Map.of("type", "error", "text", message)));
+        }
+
+
+    }
 
     @PostMapping("add")
     public ResponseEntity<?> add(@RequestBody MemberForm memberForm) {
