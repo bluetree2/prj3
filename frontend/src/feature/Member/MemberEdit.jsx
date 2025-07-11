@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Modal,
   Row,
   Spinner,
@@ -14,14 +15,14 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 export function MemberEdit() {
-  const [params] = useSearchParams();
   const [member, setMember] = useState(null);
-  const [password, setPassword] = useState("");
   const [modalShow, setModalShow] = useState();
   const [passwordModalShow, setPasswordModalShow] = useState(false);
+  const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword1, setNewPassword1] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
+  const [params] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +86,33 @@ export function MemberEdit() {
 
   if (!member) {
     return <Spinner />;
+  }
+
+  function handleChangePasswordButtonClick() {
+    axios
+      .put(`/api/member/changePassword`, {
+        email: member.email,
+        oldPassword: oldPassword,
+        newPassword: newPassword1,
+      })
+      .then((res) => {
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .catch((err) => {
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .finally(() => {
+        setOldPassword("");
+        setNewPassword1("");
+        setNewPassword2("");
+        setPasswordModalShow(false);
+      });
   }
 
   return (
@@ -214,9 +242,9 @@ export function MemberEdit() {
               onChange={(e) => setNewPassword2(e.target.value)}
             ></FormControl>
             {passwordConfirm || (
-              <FromText className={"text=danger"}>
+              <FormText className={"text=danger"}>
                 패스워드가 일치하지 않습니다.
-              </FromText>
+              </FormText>
             )}
           </FormGroup>
         </Modal.Body>
@@ -225,15 +253,15 @@ export function MemberEdit() {
           <Button
             className="me-2"
             variant="outline-dark"
-            onClick={() => setModalShow(false)}
+            onClick={() => setPasswordModalShow(false)}
           >
             취소
           </Button>
           <Button
             disabled={changePasswordDisable}
             className="me-2"
-            variant="primaryq"
-            onClick={handleSaveButtonClick}
+            variant="primary"
+            onClick={handleChangePasswordButtonClick}
           >
             변경
           </Button>

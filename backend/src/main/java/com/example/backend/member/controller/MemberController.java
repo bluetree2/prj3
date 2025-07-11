@@ -1,5 +1,6 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.dto.ChangePasswordForm;
 import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
@@ -82,7 +83,25 @@ public class MemberController {
         return ResponseEntity.ok().body(
                 Map.of("message", Map.of("type", "success", "text", "수정이 완료되었습니다")));
 
-    
+
+    }
+
+    @PutMapping("changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm memberForm) {
+        System.out.println("memberForm = " + memberForm);
+
+        try {
+            memberService.changePassword(memberForm);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(401).body(
+                    Map.of("message", Map.of("type", "error", "text", message)));
+        }
+
+        return ResponseEntity.ok().body(
+                Map.of("message", Map.of("type", "success", "text", "암호가 변경되었습니다."))
+        );
     }
 
 }
