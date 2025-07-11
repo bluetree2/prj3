@@ -16,16 +16,69 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LearnJwtController {
 
-    private final JwtEncoder jwtEncoder;
+    public final JwtEncoder jwtEncoder;
 
+
+    @GetMapping("sub10")
+    @PreAuthorize("hasAuthority('SCOPE_manager')")
+    public String sub10Manager() {
+        System.out.println("LearnJwtController.sub10Manager");
+        return null;
+    }
+
+    @GetMapping("sub9")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
+    public String sub9Admin() {
+        System.out.println("LearnJwtController.sub9Admin");
+        return null;
+    }
+
+    @GetMapping("sub8")
+    public String sub8() {
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .subject("11@11.com")
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds((60 * 60 * 24 * 365)))
+                .claim("scp", "manager")
+                .build();
+
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    @GetMapping("sub7")
+    public String sub7() {
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .subject("11@11.com")
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds((60 * 60 * 24 * 365)))
+                .claim("scp", "admin")
+                .build();
+
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    @GetMapping("sub6")
+    public String sub6() {
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .subject("11@11.com")
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds((60 * 60 * 24 * 365)))
+                .build();
+
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
 
     @GetMapping("sub3")
     // 유효한 토큰이 있는 요청만 실행 가능 아니면 401 응답
     // @PreAuthorize는 configuration에 @enableMethodSecurity 있어야 함
     @PreAuthorize("isAuthenticated()")
-    public String sub3() {
+    public String sub3(Authentication authentication) {
         System.out.println("LearnJwtController.sub3");
-        return "";
+
+        return null;
     }
 
     // Authentication 객체를 request handler method 파라미터에 두면
