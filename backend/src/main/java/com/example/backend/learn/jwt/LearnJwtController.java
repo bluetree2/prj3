@@ -1,13 +1,12 @@
 package com.example.backend.learn.jwt;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.Map;
@@ -18,6 +17,31 @@ import java.util.Map;
 public class LearnJwtController {
 
     private final JwtEncoder jwtEncoder;
+
+
+    @GetMapping("sub3")
+    // 유효한 토큰이 있는 요청만 실행 가능 아니면 401 응답
+    // @PreAuthorize는 configuration에 @enableMethodSecurity 있어야 함
+    @PreAuthorize("isAuthenticated()")
+    public String sub3() {
+        System.out.println("LearnJwtController.sub3");
+        return "";
+    }
+
+    // Authentication 객체를 request handler method 파라미터에 두면
+    // jwt가 유효하면 name속성이 subject(jwt)인 authentication 객체를 대입
+    // 아니면 null 대입
+    @GetMapping("sub2")
+    public String sub2(Authentication authentication) {
+        System.out.println("LearnJwtController.sub2");
+        if (authentication == null) {
+            System.out.println("로그인 안했거나 유효하지 않은 토큰");
+        } else {
+            System.out.println(authentication.getName());
+        }
+
+        return "";
+    }
 
     @PostMapping("sub1")
     public String sub1(@RequestBody Map<String, String> data) {

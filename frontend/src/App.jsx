@@ -27,9 +27,55 @@ function App() {
     localStorage.removeItem("token");
   }
 
+  function handleButton3Click() {
+    // localStorage 에서 token 얻기
+    const token = localStorage.getItem("token");
+    // get, post, put,delete
+    if (token) {
+      // 있으면 토큰 들고 요청
+      // Authentication 헤더에 "Bearer"를 앞에 붙이고
+      axios
+        .get("/api/learn/jwt/sub2", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {});
+    } else {
+      axios.get("/api/learn/jwt/sub2").then((res) => {});
+    }
+  }
+
+  function handleButton4Click() {
+    axios.get("/api/learn/jwt/sub2").then((res) => {});
+  }
+
+  function handleButton5Click() {
+    const token = localStorage.getItem("token");
+    // get, post, put,delete
+    if (token) {
+      // 있으면 토큰 들고 요청
+      // Authentication 헤더에 "Bearer"를 앞에 붙이고
+      axios
+        .get("/api/learn/jwt/sub3", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {});
+    } else {
+      axios.get("/api/learn/jwt/sub3").then((res) => {});
+    }
+  }
+
   return (
     <div>
       <h3>jwt 로그인 연습</h3>
+      <button onClick={handleButton5Click}>
+        5. isauthenticated() 설정된 request handler method에 요청
+      </button>
+      <button onClick={handleButton4Click}> 4. token 안들고 요청</button>
+      <button onClick={handleButton3Click}> 3. token 들고 요청</button>
       <button onClick={handleButton2Click}> 2. token 지우기 (logout)</button>
       <button onClick={handleButton1Click}> 1. token 얻기 (login)</button>
     </div>
