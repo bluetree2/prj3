@@ -3,7 +3,8 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 // 유효기간을 넘김 토큰 삭제
-const token = jwtDecode(localStorage.getItem("token"));
+// const token = jwtDecode(localStorage.getItem("token"));
+const token = localStorage.getItem("token");
 if (token) {
   const decoded = jwtDecode(token);
   const exp = decoded.exp;
