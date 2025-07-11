@@ -136,9 +136,10 @@ public class MemberService {
     public String getToken(MemberLoginForm loginForm) {
         // 해당 email의 데이터 있느지
         Optional<Member> db = memberRepository.findById(loginForm.getEmail());
-        if (!db.isPresent()) {
+        if (db.isPresent()) {
             // 있으면 패스워드 맞는지
             if (db.get().getPassword().equals(loginForm.getPassword())) {
+                // todo : 오류 수정
                 // token 만들어서 리턴
                 JwtClaimsSet claims = JwtClaimsSet.builder()
                         .subject(loginForm.getEmail())
