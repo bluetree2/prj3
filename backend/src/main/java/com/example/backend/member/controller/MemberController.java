@@ -3,7 +3,10 @@ package com.example.backend.member.controller;
 import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+//import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,14 +67,25 @@ public class MemberController {
         return memberService.list();
     }
 
+
     @GetMapping(params = "email")
-    public MemberDto getemail(String email) {
-        return memberService.get(email);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getMember(String email, Authentication authentication) {
+        if (authentication.getName().equals(email)) {
+            return ResponseEntity.ok().body(memberService.get(email));
+        } else {
+            return ResponseEntity.status(403).build();
+        }
     }
 
     @DeleteMapping()
-    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm) {
-        System.out.println("memberForm = " + memberForm);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> deleteMember(@RequestBody MemberForm memberForm,
+                                          Authentication authentication) {
+        if (!authentication.getName().equals(memberForm.getEmail())) {
+            return ResponseEntity.status(403).build();
+        }
+
         try {
             memberService.delete(memberForm);
 
@@ -107,7 +121,12 @@ public class MemberController {
     }
 
     @PutMapping("changePassword")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm memberForm) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm memberForm,
+                                            Authentication authentication) {
+        if (!authentication.getName().equals(memberForm.getEmail())) {
+            return ResponseEntity.status(403).build();
+        }
         System.out.println("memberForm = " + memberForm);
 
         try {
