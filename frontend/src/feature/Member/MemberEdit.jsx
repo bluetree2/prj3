@@ -18,6 +18,10 @@ export function MemberEdit() {
   const [member, setMember] = useState(null);
   const [password, setPassword] = useState("");
   const [modalShow, setModalShow] = useState();
+  const [passwordModalShow, setPasswordModalShow] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword1, setNewPassword1] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +41,24 @@ export function MemberEdit() {
 
   if (!member) {
     return <Spinner />;
+  }
+
+  // 암호 변경 버튼 활성화 여부
+  let changePasswordDisable = false;
+  let passwordConfirm = true;
+
+  if (oldPassword === "") {
+    changePasswordDisable = true;
+  }
+  if (newPassword1 === "") {
+    changePasswordDisable = true;
+  }
+  if (newPassword2 === "") {
+    changePasswordDisable = true;
+  }
+  if (newPassword1 !== newPassword2) {
+    changePasswordDisable = true;
+    passwordConfirm = false;
   }
 
   function handleSaveButtonClick() {
@@ -74,6 +96,14 @@ export function MemberEdit() {
             <FormLabel>이메일</FormLabel>
             <FormControl disabled value={member.email} />
           </FormGroup>
+        </div>
+        <div className="mb-4">
+          <Button
+            variant="outline-info"
+            onClick={() => setPasswordModalShow(true)}
+          >
+            암호 변경
+          </Button>
         </div>
         <div>
           <FormGroup controlId={"nickName1"} className={"mb-3"}>
@@ -149,6 +179,63 @@ export function MemberEdit() {
             onClick={handleSaveButtonClick}
           >
             저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={passwordModalShow}
+        onHide={() => setPasswordModalShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>암호 변경</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup controlId={"password2"} className={"mb-3"}>
+            <FormLabel>현재 암호</FormLabel>
+            <FormControl
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+          <FormGroup controlId={"password3"} className={"mb-3"}>
+            <FormLabel>변경할 암호</FormLabel>
+            <FormControl
+              type="password"
+              value={newPassword1}
+              onChange={(e) => setNewPassword1(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+          <FormGroup controlId={"password4"} className={"mb-3"}>
+            <FormLabel>변경할 암호 확인</FormLabel>
+            <FormControl
+              type="password"
+              value={newPassword2}
+              onChange={(e) => setNewPassword2(e.target.value)}
+            ></FormControl>
+            {passwordConfirm || (
+              <FromText className={"text=danger"}>
+                패스워드가 일치하지 않습니다.
+              </FromText>
+            )}
+          </FormGroup>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            className="me-2"
+            variant="outline-dark"
+            onClick={() => setModalShow(false)}
+          >
+            취소
+          </Button>
+          <Button
+            disabled={changePasswordDisable}
+            className="me-2"
+            variant="primaryq"
+            onClick={handleSaveButtonClick}
+          >
+            변경
           </Button>
         </Modal.Footer>
       </Modal>
