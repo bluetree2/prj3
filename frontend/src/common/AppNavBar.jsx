@@ -12,7 +12,7 @@ import { useContext, useState } from "react";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 
 export function AppNavBar() {
-  const { keyword, setKeyword } = useState();
+  const [keyword, setKeyword] = useState("");
   const { user, isAdmin } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 

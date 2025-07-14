@@ -22,9 +22,12 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
                    b.insertedAt )
             FROM Board b join Member m
                         on b.author.email = m.email
-            ORDER BY b.id DESC
+             WHERE b.title LIKE %:keyword%
+                           OR b.content LIKE %:keyword%
+                           OR m.nickName LIKE %:keyword%
+                        ORDER BY b.id DESC
             """)
-    List<BoardListDto> findAllBy();
+    List<BoardListDto> findAllBy(String keyword);
 
     //                               todo :
     @Query(value = """

@@ -41,3 +41,12 @@ INSERT INTO auth
 VALUES ('trump@abc.com', 'admin');
 select *
 from auth;
+
+insert into board
+    (title, content, author)
+values ('qwe', 'asd', '99@99.com'),
+       ('zxc', '123', '99@99.com'),
+       ('456', 'rty', '99@99.com'),
+       ('fgh', 'vbn', '88@88.com'),
+       ('789', 'uio', '88@88.com'),
+       ('jkl', 'nmp', '88@88.com')

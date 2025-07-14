@@ -59,9 +59,9 @@ public class BoardService {
         return true;
     }
 
-    public List<BoardListDto> list() {
+    public List<BoardListDto> list(String keyword) {
 //        return boardRepository.findAllByOrderByIdDesc();
-        return boardRepository.findAllBy();
+        return boardRepository.findAllBy(keyword);
     }
 
     public BoardDto getBoardById(Integer id) {
@@ -82,7 +82,7 @@ public class BoardService {
             throw new RuntimeException("권한이 없습니다");
         }
         Board db = boardRepository.findById(id).get();
-        
+
         if (db.getAuthor().getEmail().equals(authentication.getName())) {
             boardRepository.deleteById(id);
         } else {

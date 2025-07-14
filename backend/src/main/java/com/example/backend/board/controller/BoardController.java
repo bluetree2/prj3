@@ -62,10 +62,10 @@ public class BoardController {
 
 
     @GetMapping("list")
-    public List<BoardListDto> getAllBoards() {
+    public List<BoardListDto> getAllBoards(@RequestParam(value = "q", defaultValue = "") String keyword) {
         System.out.println("BoardController.getAllBoards");
 
-        return boardService.list();
+        return boardService.list(keyword);
     }
 
 
