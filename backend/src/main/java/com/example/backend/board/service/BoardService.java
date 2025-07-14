@@ -2,18 +2,17 @@ package com.example.backend.board.service;
 
 
 import com.example.backend.Board;
-import com.example.backend.board.dto.BoardListInfo;
+import com.example.backend.board.dto.BoardListDto;
 import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.board.dto.BoardDto;
+import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class BoardService {
         board.setTitle(dto.getTitle());
         board.setContent(dto.getContent());
 
-        memberRepository.findById(authentication.getName()).get();
+        Member author = memberRepository.findById(authentication.getName()).get();
         board.setAuthor(author);
         //todo : 수정
 
@@ -60,39 +59,54 @@ public class BoardService {
         return true;
     }
 
-    public List<BoardListInfo> list() {
-        return boardRepository.findAllByOrderByIdDesc();
+    public List<BoardListDto> list() {
+//        return boardRepository.findAllByOrderByIdDesc();
+        return boardRepository.findAllBy();
     }
 
     public BoardDto getBoardById(Integer id) {
-        Board board = boardRepository.findById(id).get();
-        BoardDto dto = new BoardDto();
-        dto.setId(board.getId());
-        dto.setTitle(board.getTitle());
-        dto.setContent(board.getContent());
-        dto.setAuthor(board.getAuthor());
-        dto.setInsertedAt(board.getInsertedAt());
+        BoardDto board = boardRepository.findBoardById(id);
+//        BoardDto dto = new BoardDto();
+//        dto.setId(board.getId());
+//        dto.setTitle(board.getTitle());
+//        dto.setContent(board.getContent());
+//        dto.setAuthor(board.getAuthor());
+//        dto.setInsertedAt(board.getInsertedAt());
 
-        return dto;
+        return board;
     }
 
 
-    public void deleteById(Integer id) {
-        boardRepository.deleteById(id);
+    public void deleteById(Integer id, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다");
+        }
+        Board db = boardRepository.findById(id).get();
+        if (!db.getAuthor().getEmail().equals(authentication.getName())) {
+            boardRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("권한이 없습니다");
+        }
     }
 
-    public void update(BoardDto dto) {
+    public void update(BoardDto dto, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+
         //조회  
         Board board = boardRepository.findById(dto.getId()).get();
 
-        // 변경
-        board.setTitle(dto.getTitle());
-        board.setContent(dto.getContent());
-        board.setAuthor(dto.getAuthor());
+        if (board.getAuthor().getEmail().equals(authentication.getName())) {
+            // 변경
+            board.setTitle(dto.getTitle());
+            board.setContent(dto.getContent());
+            // 저장
+            boardRepository.save(board);
 
-        // 저장
-        boardRepository.save(board);
-
+        } else {
+            throw new RuntimeException("권한이 없습니다.");
+        }
 
     }
 }

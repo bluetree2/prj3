@@ -1,6 +1,7 @@
 package com.example.backend.board.controller;
 
 import com.example.backend.board.dto.BoardDto;
+import com.example.backend.board.dto.BoardListDto;
 import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,14 @@ public class BoardController {
     private final BoardService boardService;
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateBoard(@PathVariable Integer id, @RequestBody BoardDto dto) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateBoard(@PathVariable Integer id, @RequestBody BoardDto dto,
+                                         Authentication authentication) {
 
         boolean result = boardService.validate(dto);
 
         if (result) {
-            boardService.update(dto);
+            boardService.update(dto, authentication);
 
             return ResponseEntity.ok().body(Map.of("message",
                     Map.of("type", "success", "text", id + "번 게시물이 수정 되었습니다.")
@@ -44,8 +47,9 @@ public class BoardController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteBoard(@PathVariable Integer id) {
-        boardService.deleteById(id);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> deleteBoard(@PathVariable Integer id, Authentication authentication) {
+        boardService.deleteById(id, authentication);
         return ResponseEntity.ok().body(Map.of("message",
                 Map.of("type", "success", "text", id + "번 게시물이 삭제 되었습니다.")));
     }
@@ -57,7 +61,7 @@ public class BoardController {
 
 
     @GetMapping("list")
-    public List<BoardListInfo> getAllBoards() {
+    public List<BoardListDto> getAllBoards() {
         System.out.println("BoardController.getAllBoards");
 
         return boardService.list();

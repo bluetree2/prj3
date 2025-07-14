@@ -21,7 +21,7 @@ public class Board {
     private String content;
 
     @ManyToOne
-    @JoinColumn("author");
+    @JoinColumn(name = "author")
     private Member author;
 
     @Column(updatable = false, insertable = false)

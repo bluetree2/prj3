@@ -9,6 +9,8 @@ CREATE TABLE board
     FOREIGN KEY (author) REFERENCES member (email)
 );
 
+DROP TABLE board;
+
 -- 회원 테이블
 
 CREATE TABLE member
