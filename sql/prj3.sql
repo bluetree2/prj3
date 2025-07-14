@@ -50,3 +50,10 @@ values ('qwe', 'asd', '99@99.com'),
        ('fgh', 'vbn', '88@88.com'),
        ('789', 'uio', '88@88.com'),
        ('jkl', 'nmp', '88@88.com')
+
+
+# 페이지 테스트용 데이터
+INSERT INTO board
+(title, content, author)
+select  title, content, board.author
+From board
