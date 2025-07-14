@@ -129,7 +129,7 @@ public class MemberService {
         Member db = memberRepository.findById(data.getEmail()).get();
 
 //        if (db.getPassword().equals(data.getOldPassword())) {
-        if (passwordEncoder.matches(data.getOldPassword(), db.getPassword()) == false) {
+        if (passwordEncoder.matches(data.getOldPassword(), db.getPassword())) {
 //            db.setPassword(data.getNewPassword());
             db.setPassword(passwordEncoder.encode(data.getNewPassword()));
             memberRepository.save(db);
