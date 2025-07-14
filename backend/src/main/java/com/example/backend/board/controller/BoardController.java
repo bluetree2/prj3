@@ -55,6 +55,7 @@ public class BoardController {
     }
 
     @GetMapping("{id}")
+    // todo : list
     public BoardDto getBoard(@PathVariable Integer id) {
         return boardService.getBoardById(id);
     }

@@ -24,3 +24,20 @@ CREATE TABLE member
 );
 
 drop table member;
+
+# 권한 테이블
+Create table auth
+(
+    member_email VARCHAR(255) NOT NULL,
+    auth_name    VARCHAR(255) NOT NULL,
+    PRIMARY KEY (member_email, auth_name),
+    Foreign Key (member_email) References member (email)
+
+
+);
+
+INSERT INTO auth
+    (member_email, auth_name)
+VALUES ('trump@abc.com', 'admin');
+select *
+from auth;

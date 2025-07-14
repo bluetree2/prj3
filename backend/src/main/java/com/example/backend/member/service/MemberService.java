@@ -1,7 +1,9 @@
 package com.example.backend.member.service;
 
 import com.example.backend.member.dto.*;
+import com.example.backend.member.entity.Auth;
 import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.AuthRepository;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +17,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -146,7 +149,11 @@ public class MemberService {
             // 있으면 패스워드 맞는지
 //            if (db.get().getPassword().equals(loginForm.getPassword())) {
             if (passwordEncoder.matches(loginForm.getPassword(), db.get().getPassword())) {
-                // todo : 오류 수정
+                List<Auth> authList = AuthRepository.findByMember(db.get());
+                R collect = authList.stream()
+                        .map(auth -> auth.getId().getAuthName())
+                        .collect(Collectors.joining("  "));
+
                 // token 만들어서 리턴
                 JwtClaimsSet claims = JwtClaimsSet.builder()
                         .subject(loginForm.getEmail())
