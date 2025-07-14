@@ -1,10 +1,26 @@
-import { Link, NavLink } from "react-router";
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { useContext } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
+import {
+  Form,
+  Container,
+  InputGroup,
+  Nav,
+  Navbar,
+  FormControl,
+  Button,
+} from "react-bootstrap";
+import { useContext, useState } from "react";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 
 export function AppNavBar() {
+  const { keyword, setKeyword } = useState();
   const { user, isAdmin } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
+
+  function handleSearchFormSubmit(e) {
+    e.preventDefault();
+    // console.log("조회 폼 선택됨");
+    navigate(`/?q=${keyword}`);
+  }
 
   return (
     <div>
@@ -24,6 +40,8 @@ export function AppNavBar() {
                   새글
                 </Nav.Link>
               )}
+            </Nav>
+            <Nav className="order-lg-3" activeKey={window.location.pathname}>
               {user == null && (
                 <Nav.Link as={NavLink} to="/signup">
                   회원가입
@@ -50,6 +68,20 @@ export function AppNavBar() {
                 </Nav.Link>
               )}
             </Nav>
+
+            <Form
+              inline={"true"}
+              onSubmit={handleSearchFormSubmit}
+              className="order-lg-2 mx-lg-auto"
+            >
+              <InputGroup>
+                <FormControl
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                ></FormControl>
+                <Button type="submit">검색</Button>
+              </InputGroup>
+            </Form>
           </Navbar.Collapse>
         </Container>
       </Navbar>

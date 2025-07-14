@@ -4,6 +4,7 @@ import com.example.backend.Board;
 import com.example.backend.board.dto.BoardDto;
 import com.example.backend.board.dto.BoardListDto;
 import com.example.backend.board.dto.BoardListInfo;
+import com.example.backend.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -39,6 +40,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
             WHERE b.id = :id
             """)
     BoardDto findBoardById(Integer id);
+
+    void deleteByAuthor(Member db);
     //projection : 필요한 정보만 뽑아내느 것
 
 }
