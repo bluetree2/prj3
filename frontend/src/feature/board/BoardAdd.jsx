@@ -16,10 +16,9 @@ import { AuthenticationContext } from "../../common/AuthenticationContextProvide
 export function BoardAdd() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const { user } = useContext(AuthenticationContext());
+  const { user } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   function handleSaveButtonClick() {
@@ -28,7 +27,6 @@ export function BoardAdd() {
       .post("/api/board/add", {
         title: title,
         content: content,
-        author: author,
       })
       .then((res) => {
         const message = res.data.message;
@@ -64,9 +62,6 @@ export function BoardAdd() {
   if (content.trim() === "") {
     validata = false;
   }
-  if (author.trim() === "") {
-    validata = false;
-  }
 
   return (
     <Row className="justify-content-center">
@@ -99,7 +94,7 @@ export function BoardAdd() {
               // todo : 수정
               // value={author}
               value={user.nickName}
-              onChange={(e) => setAuthor(e.target.value)}
+              disabled
             />
           </FormGroup>
         </div>
