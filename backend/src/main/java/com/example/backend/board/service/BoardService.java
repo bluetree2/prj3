@@ -9,10 +9,13 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -59,9 +62,30 @@ public class BoardService {
         return true;
     }
 
-    public List<BoardListDto> list(String keyword) {
+    public Map<String, Object> list(String keyword, Integer pageNumber) {
 //        return boardRepository.findAllByOrderByIdDesc();
-        return boardRepository.findAllBy(keyword);
+//        return boardRepository.findAllBy(keyword, PageRequest.of(-1, 10));
+        Page<BoardListDto> boardListDtoPage
+                = boardRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+
+        int totalPages = boardListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+//        todo :
+
+
+        System.out.println("pageinfo = " + pageInfo);
+        System.out.println("boardListDtoPage = " + boardListDtoPage.getContent());
+        return Map.of("pageInfo", pageInfo,
+                "boardList", boardListDtoPage.getContent());
+
     }
 
     public BoardDto getBoardById(Integer id) {

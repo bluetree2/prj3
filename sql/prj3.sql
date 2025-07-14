@@ -56,4 +56,19 @@ values ('qwe', 'asd', '99@99.com'),
 INSERT INTO board
 (title, content, author)
 select  title, content, board.author
-From board
+From board;
+
+# 댓글 테이블
+CREATE TABLE comment
+(
+    id          INT AUTO_INCREMENT NOT NULL,
+    board_id    INT                NOT NULL,
+    author      VARCHAR(255)       NOT NULL,
+    comment     VARCHAR(2000)      NOT NULL,
+    inserted_at datetime           NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_comment PRIMARY KEY (id),
+    FOREIGN KEY (author) REFERENCES member (email),
+    FOREIGN KEY (board_id) REFERENCES board (id)
+);
+
+
