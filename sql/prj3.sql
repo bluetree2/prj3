@@ -6,6 +6,7 @@ CREATE TABLE board
     author      VARCHAR(255)       NOT NULL,
     inserted_at datetime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_board PRIMARY KEY (id)
+    FOREIGN KEY (author) REFERENCES member (email)
 );
 
 -- 회원 테이블

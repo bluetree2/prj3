@@ -8,6 +8,7 @@ import com.example.backend.board.dto.BoardDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +21,17 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public void add(BoardDto dto) {
+    public void add(BoardDto dto, Authentication authentication) {
+
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+
         // entity에 dto의 값을 옮겨 담고
         Board board = new Board();
         board.setTitle(dto.getTitle());
         board.setContent(dto.getContent());
-        board.setAuthor(dto.getAuthor());
+        board.setAuthor(authentication.getName());
 
         //repository에 save실행
         boardRepository.save(board);
@@ -42,11 +48,8 @@ public class BoardService {
             return false;
         }
 
-        if (dto.getAuthor() == null || dto.getAuthor().trim().isBlank()) {
-            System.out.println(dto.getAuthor());
-            return false;
-        }
 
+//        System.out.println("success");
         return true;
     }
 
