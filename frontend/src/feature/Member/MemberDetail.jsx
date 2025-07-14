@@ -20,7 +20,7 @@ export function MemberDetail() {
   const [modalShow, setModalShow] = useState(false);
   const [password, setPassword] = useState("");
 
-  const { logout } = useContext(AuthenticationContext);
+  const { logout, hasAccess } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,24 +97,26 @@ export function MemberDetail() {
             />
           </FormGroup>
         </div>
-        <div>
-          <Button
-            variant={"outline-danger"}
-            size={"sm"}
-            className={"me-2"}
-            onClick={() => setModalShow(true)}
-          >
-            회원 탈퇴
-          </Button>
-          <Button
-            size="sm"
-            className={"me-2"}
-            variant={"outline-info"}
-            onClick={() => navigate(`/member/edit?email=${member.email}`)}
-          >
-            수정
-          </Button>
-        </div>
+        {hasAccess(member.email) && (
+          <div>
+            <Button
+              variant={"outline-danger"}
+              size={"sm"}
+              className={"me-2"}
+              onClick={() => setModalShow(true)}
+            >
+              회원 탈퇴
+            </Button>
+            <Button
+              size="sm"
+              className={"me-2"}
+              variant={"outline-info"}
+              onClick={() => navigate(`/member/edit?email=${member.email}`)}
+            >
+              수정
+            </Button>
+          </div>
+        )}
       </Col>
       <Modal show={modalShow} onHide={() => setModalShow(false)}>
         <Modal.Header closeButton>

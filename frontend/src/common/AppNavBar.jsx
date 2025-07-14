@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 
 export function AppNavBar() {
-  const { user } = useContext(AuthenticationContext);
+  const { user, isAdmin } = useContext(AuthenticationContext);
 
   return (
     <div>
@@ -29,7 +29,7 @@ export function AppNavBar() {
                   회원가입
                 </Nav.Link>
               )}
-              {user !== null && (
+              {isAdmin() && (
                 <Nav.Link as={NavLink} to="/Member/list">
                   회원목록
                 </Nav.Link>

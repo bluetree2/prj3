@@ -69,9 +69,11 @@ public class MemberController {
 
 
     @GetMapping(params = "email")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() or hasAuthority('SCOPE_admin')")
     public ResponseEntity<?> getMember(String email, Authentication authentication) {
         if (authentication.getName().equals(email)) {
+            // todo : 확인
+            authentication.getAuthorities().forEach(System.out::println);
             return ResponseEntity.ok().body(memberService.get(email));
         } else {
             return ResponseEntity.status(403).build();

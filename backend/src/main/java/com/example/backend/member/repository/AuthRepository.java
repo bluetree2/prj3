@@ -8,7 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface AuthRepository extends JpaRepository<Auth, AuthId> {
-    List<Auth> findByMember(Member member) {
-        return null;
-    }
+    List<Auth> findByMember(Member member);
 }

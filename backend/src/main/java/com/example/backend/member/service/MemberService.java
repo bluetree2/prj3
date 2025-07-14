@@ -27,7 +27,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtEncoder jwtEncoder;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final AuthRepository authRepository;
 
     public void add(MemberForm memberForm) {
 
@@ -149,10 +150,11 @@ public class MemberService {
             // 있으면 패스워드 맞는지
 //            if (db.get().getPassword().equals(loginForm.getPassword())) {
             if (passwordEncoder.matches(loginForm.getPassword(), db.get().getPassword())) {
-                List<Auth> authList = AuthRepository.findByMember(db.get());
-                R collect = authList.stream()
+                List<Auth> authList = authRepository.findByMember(db.get());
+
+                String authListString = authList.stream()
                         .map(auth -> auth.getId().getAuthName())
-                        .collect(Collectors.joining("  "));
+                        .collect(Collectors.joining(" "));
 
                 // token 만들어서 리턴
                 JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -160,6 +162,7 @@ public class MemberService {
                         .issuer("self")
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
+                        .claim("scp", authListString)
                         .build();
 
                 return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

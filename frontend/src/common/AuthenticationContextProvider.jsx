@@ -60,6 +60,7 @@ export function AuthenticationContextProvider({ children }) {
       setUser({
         email: res.data.email,
         nickName: res.data.nickName,
+        scope: payload.scp.split(" "),
       });
     });
   }
@@ -76,6 +77,9 @@ export function AuthenticationContextProvider({ children }) {
   }
 
   // isAdmin
+  function isAdmin() {
+    return user && user.scope.includes("admin");
+  }
 
   // step3. provide context
   return (
@@ -85,6 +89,7 @@ export function AuthenticationContextProvider({ children }) {
         login: login,
         logout: logout,
         hasAccess: hasAccess,
+        isAdmin: isAdmin,
       }}
     >
       {children}
