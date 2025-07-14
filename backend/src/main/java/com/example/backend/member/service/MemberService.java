@@ -4,15 +4,13 @@ import com.example.backend.member.dto.*;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +23,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtEncoder jwtEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public void add(MemberForm memberForm) {
 
@@ -33,7 +32,9 @@ public class MemberService {
         if (this.validate(memberForm)) {
             Member member = new Member();
             member.setEmail(memberForm.getEmail());
-            member.setPassword(memberForm.getPassword());
+//            member.setPassword(memberForm.getPassword()); // 암호화
+            member.setPassword(passwordEncoder.encode(memberForm.getPassword()));
+
             member.setInfo(memberForm.getInfo());
             member.setNickName(memberForm.getNickName());
 
@@ -59,7 +60,7 @@ public class MemberService {
         }
         // 형식에 맞는지
         String email = memberForm.getEmail();
-        if (!Pattern.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}", email)) {
+        if (!Pattern.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", email)) {
             throw new RuntimeException("이메일 형식에 맞지 않습니다");
         }
         // password 값 여부
@@ -95,7 +96,9 @@ public class MemberService {
 
     public void delete(MemberForm memberForm) {
         Member db = memberRepository.findById(memberForm.getEmail()).get();
-        if (db.getPassword().equals(memberForm.getPassword())) {
+//        if (db.getPassword().equals(memberForm.getPassword())) {
+        // matches(평문,인코딩문)
+        if (passwordEncoder.matches(memberForm.getPassword(), db.getPassword())) {
             memberRepository.delete(db);
         } else {
             throw new RuntimeException("함호가 일치하지 않습니다");
@@ -138,7 +141,8 @@ public class MemberService {
         Optional<Member> db = memberRepository.findById(loginForm.getEmail());
         if (db.isPresent()) {
             // 있으면 패스워드 맞는지
-            if (db.get().getPassword().equals(loginForm.getPassword())) {
+//            if (db.get().getPassword().equals(loginForm.getPassword())) {
+            if (passwordEncoder.matches(loginForm.getPassword(), db.get().getPassword())) {
                 // todo : 오류 수정
                 // token 만들어서 리턴
                 JwtClaimsSet claims = JwtClaimsSet.builder()
