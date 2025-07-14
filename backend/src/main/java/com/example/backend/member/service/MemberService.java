@@ -24,6 +24,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtEncoder jwtEncoder;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void add(MemberForm memberForm) {
 
@@ -110,10 +111,10 @@ public class MemberService {
         Member db = memberRepository.findById(memberForm.getEmail()).get();
 
         //암호 확인
-        if (!db.getPassword().equals(memberForm.getPassword())) {
+//        if (!db.getPassword().equals(memberForm.getPassword())) {
+        if (passwordEncoder.matches(memberForm.getPassword(), db.getPassword()) == false) {
             throw new RuntimeException("암호가 일치하지 않습니다.");
-        }
-        {
+        } else {
 
             // 변경
             db.setNickName(memberForm.getNickName());
@@ -127,8 +128,10 @@ public class MemberService {
     public void changePassword(ChangePasswordForm data) {
         Member db = memberRepository.findById(data.getEmail()).get();
 
-        if (db.getPassword().equals(data.getOldPassword())) {
-            db.setPassword(data.getNewPassword());
+//        if (db.getPassword().equals(data.getOldPassword())) {
+        if (passwordEncoder.matches(data.getOldPassword(), db.getPassword()) == false) {
+//            db.setPassword(data.getNewPassword());
+            db.setPassword(passwordEncoder.encode(data.getNewPassword()));
             memberRepository.save(db);
         } else {
             throw new RuntimeException("이전 패스워드가 일치하지 않습니다");
