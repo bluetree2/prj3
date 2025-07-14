@@ -3,13 +3,15 @@ package com.example.backend.board.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@Data
 @AllArgsConstructor
-@Getter
+@NoArgsConstructor
 public class BoardListDto {
     private Integer id;
     private String title;
@@ -22,7 +24,7 @@ public class BoardListDto {
 
         Duration duration = Duration.between(insertedAt, now);
 
-        long seconds = duration.getSeconds();
+        long seconds = duration.toSeconds();
 
         if (seconds < 60) {
             return "방금 전";

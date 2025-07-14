@@ -82,7 +82,8 @@ public class BoardService {
             throw new RuntimeException("권한이 없습니다");
         }
         Board db = boardRepository.findById(id).get();
-        if (!db.getAuthor().getEmail().equals(authentication.getName())) {
+        
+        if (db.getAuthor().getEmail().equals(authentication.getName())) {
             boardRepository.deleteById(id);
         } else {
             throw new RuntimeException("권한이 없습니다");
