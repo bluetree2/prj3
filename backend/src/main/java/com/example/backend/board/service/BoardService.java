@@ -5,6 +5,7 @@ import com.example.backend.Board;
 import com.example.backend.board.dto.BoardListInfo;
 import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.board.dto.BoardDto;
+import com.example.backend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     public void add(BoardDto dto, Authentication authentication) {
 
@@ -31,7 +33,12 @@ public class BoardService {
         Board board = new Board();
         board.setTitle(dto.getTitle());
         board.setContent(dto.getContent());
-        board.setAuthor(authentication.getName());
+
+        memberRepository.findById(authentication.getName()).get();
+        board.setAuthor(author);
+        //todo : 수정
+
+//        board.setAuthor(authentication.getName());
 
         //repository에 save실행
         boardRepository.save(board);
