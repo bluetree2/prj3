@@ -3,6 +3,7 @@ package com.example.backend.comment.service;
 import com.example.backend.Board;
 import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.comment.dto.CommentForm;
+import com.example.backend.comment.dto.CommentListDto;
 import com.example.backend.comment.entity.Comment;
 import com.example.backend.comment.repository.CommentRepository;
 import com.example.backend.member.entity.Member;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional
 @Service
@@ -23,8 +26,15 @@ public class CommentService {
 
 
     public void add(CommentForm comment, Authentication authentication) {
+        System.out.println("comment = " + comment);
+        System.out.println("authentication = " + authentication);
         if (authentication == null) {
+            System.out.println("권한 없음");
             throw new RuntimeException("권한이 없습니다.");
+        }
+        if (comment.getComment().trim().isBlank()) {
+            System.out.println("내용 없음");
+            throw new RuntimeException("내용이 없는 댓글을 작성할 수 없습니다");
         }
 
         Board board = boardRepository.findById(comment.getBoardId()).get();
@@ -35,6 +45,12 @@ public class CommentService {
         db.setComment(comment.getComment());
         db.setAuthor(member);
 
+        System.out.println("db = " + db);
+
         commentRepository.save(db);
+    }
+
+    public List<CommentListDto> listByBoardId(Integer boardId) {
+        return commentRepository.listByBoardId(boardId);
     }
 }
