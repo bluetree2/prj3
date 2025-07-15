@@ -1,11 +1,15 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Button, Modal, Spinner } from "react-bootstrap";
-import { useState } from "react";
+import { Button, FormGroup, FormLabel, Modal, Spinner } from "react-bootstrap";
+import { useContext, useState } from "react";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function CommentItem({ comment, isProcessing, setIsProcessing }) {
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
+  const [nextComment, setNextComment] = useState(comment.comment);
+
+  const hasAccess = useContext(AuthenticationContext);
 
   function handleDeleteButtonClick() {
     setIsProcessing(true);
@@ -25,7 +29,22 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
   }
 
   function handleUpdateButtonClick() {
-    // todo : 댓글 삭제
+    setIsProcessing(true);
+    axios
+      .put(`/api/comment/`, {
+        id: comment.id,
+        comment: nextComment,
+      })
+      .then(() => {
+        toast.success("댓글이 수정되었습니다.");
+      })
+      .catch(() => {
+        toast().error("댓글 수정 중 문제가 발생하였습니다");
+      })
+      .finally(() => {
+        setIsProcessing(false);
+        setEditModalShow(false);
+      });
   }
 
   return (
@@ -49,9 +68,15 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
       {/*  댓글 삭제 모달*/}
       <Modal show={deleteModalShow} onHide={() => setDeleteModalShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>게시물 삭제 확인</Modal.Title>
+          <Modal.Title>댓글 삭제</Modal.Title>
         </Modal.Header>
-        <Modal.Body>댓글 삭제하시겠습니까?</Modal.Body>;
+        <Modal.Body>
+          <FormGroup controlId={"commentTextarea" + comment.id}>
+            <FormLabel>수정 할 댓글</FormLabel>
+            <FormControl aws={"textarea"} rows={5} />
+          </FormGroup>
+        </Modal.Body>
+        ;
         <Modal.Footer>
           <Button
             variant="outline-dark"
@@ -72,11 +97,17 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
       {/* 댓글 수정 모달 */}
       <Modal show={editModalShow} onHide={() => setModalShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>게시물 삭제 확인</Modal.Title>
+          <Modal.Title>댓글 수정</Modal.Title>
         </Modal.Header>
         <Modal.Body>{board.id}번 게시물을 수정하시겠습니까?</Modal.Body>;
         <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+          <Button
+            variant="outline-dark"
+            onClick={() => {
+              setNextcommnet(comment.comment);
+              setEditModalShow(false);
+            }}
+          >
             취소
           </Button>
           <Button variant="danger" onClick={handleUpdateButtonClick}>

@@ -47,6 +47,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     BoardDto findBoardById(Integer id);
 
     void deleteByAuthor(Member db);
+
+    List<Board> findByAuthor(Member db);
     //projection : 필요한 정보만 뽑아내느 것
 
 }

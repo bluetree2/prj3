@@ -5,6 +5,7 @@ import com.example.backend.Board;
 import com.example.backend.board.dto.BoardListDto;
 import com.example.backend.board.repository.BoardRepository;
 import com.example.backend.board.dto.BoardDto;
+import com.example.backend.comment.repository.CommentRepository;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -24,6 +25,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
 
     public void add(BoardDto dto, Authentication authentication) {
 
@@ -108,6 +110,7 @@ public class BoardService {
         Board db = boardRepository.findById(id).get();
 
         if (db.getAuthor().getEmail().equals(authentication.getName())) {
+            commentRepository.deleteByBoardId(id);
             boardRepository.deleteById(id);
         } else {
             throw new RuntimeException("권한이 없습니다");
