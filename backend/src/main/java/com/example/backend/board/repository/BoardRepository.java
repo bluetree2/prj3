@@ -37,7 +37,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     //                               todo :
     @Query(value = """
-            SELECT new com.example.backend.board.dto.BoardDto(        
+            SELECT new com.example.backend.board.dto.BoardDto(
                     b.id,
                    b.title,
                    b.content,

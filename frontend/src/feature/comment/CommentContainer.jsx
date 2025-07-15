@@ -15,7 +15,6 @@ export function CommentContainer({ boardId }) {
         .get(`/api/board/${boardId}`)
         .then((res) => {
           setCommentList(res.data);
-          console.log("rea data : ", res.data);
         })
         .catch((err) => {})
         .finally(() => {});
@@ -38,11 +37,9 @@ export function CommentContainer({ boardId }) {
         setIsProcessing={setIsProcessing}
       />
       <CommentList
-        boardId={boardId}
+        commentList={commentList}
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
-        commentList={commentList}
-        setCommentList={setCommentList}
       />
     </div>
   );
