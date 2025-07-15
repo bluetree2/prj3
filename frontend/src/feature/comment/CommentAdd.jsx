@@ -5,9 +5,8 @@ import { CommentList } from "./CommentList.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import { toast } from "react-toastify";
 
-export function CommentAdd({ boardId }) {
+export function CommentAdd({ boardId, isProcessing, setIsProcessing }) {
   const [comment, setComment] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
   const { user } = useContext(AuthenticationContext);
 
   function handleCommentSaveClick() {
