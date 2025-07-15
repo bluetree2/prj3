@@ -48,7 +48,6 @@ public class CommentController {
                             Map.of("type", "success",
                                     "text", "새 댓글이 등록되었습니다.")));
         } catch (Exception e) {
-            System.out.println("e = " + e.getMessage() + " ");
             return ResponseEntity.ok()
                     .body(Map.of("message",
                             Map.of("type", "error",

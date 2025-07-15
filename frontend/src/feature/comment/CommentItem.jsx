@@ -1,6 +1,13 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Button, FormGroup, FormLabel, Modal, Spinner } from "react-bootstrap";
+import {
+  Button,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Modal,
+  Spinner,
+} from "react-bootstrap";
 import { useContext, useState } from "react";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
@@ -39,7 +46,7 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
         toast.success("댓글이 수정되었습니다.");
       })
       .catch(() => {
-        toast().error("댓글 수정 중 문제가 발생하였습니다");
+        toast.error("댓글 수정 중 문제가 발생하였습니다");
       })
       .finally(() => {
         setIsProcessing(false);
@@ -54,29 +61,29 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
         <div>{comment.timesAgo}</div>
       </div>
       <div>{comment.comment}</div>
-      <div>
-        <Button
-          disabled={isProcessing}
-          onClick={() => setDeleteModalShow(true)}
-        >
-          {isProcessing && <Spinner size="sm" />}
-          삭제
-        </Button>
-        <Button>수정</Button>
-      </div>
-
+      {hasAccess(comment.authorEmail) && (
+        <div>
+          <Button
+            disabled={isProcessing}
+            onClick={() => setDeleteModalShow(true)}
+          >
+            {isProcessing && <Spinner size="sm" />}
+            삭제
+          </Button>
+          <Button
+            disabled={isProcessing}
+            onClick={() => setEditModalShow(true)}
+          >
+            {isProcessing && <Spinner size="sm" />}수정
+          </Button>
+        </div>
+      )}
       {/*  댓글 삭제 모달*/}
       <Modal show={deleteModalShow} onHide={() => setDeleteModalShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>댓글 삭제</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <FormGroup controlId={"commentTextarea" + comment.id}>
-            <FormLabel>수정 할 댓글</FormLabel>
-            <FormControl aws={"textarea"} rows={5} />
-          </FormGroup>
-        </Modal.Body>
-        ;
+        <Modal.Body>댓글을 삭제하시겠습니까?</Modal.Body>;
         <Modal.Footer>
           <Button
             variant="outline-dark"
@@ -89,29 +96,41 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
             variant="danger"
             onClick={handleDeleteButtonClick}
           >
+            {isProcessing && <Spinner size="sm" />}
             삭제
           </Button>
         </Modal.Footer>
       </Modal>
 
       {/* 댓글 수정 모달 */}
-      <Modal show={editModalShow} onHide={() => setModalShow(false)}>
+      <Modal show={editModalShow} onHide={() => setEditModalShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>댓글 수정</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{board.id}번 게시물을 수정하시겠습니까?</Modal.Body>;
+        <Modal.Body>
+          <FormGroup controlId={"commentTextarea" + comment.id}>
+            <FormLabel>수정 할 댓글</FormLabel>
+            <FormControl
+              as="textarea"
+              rows={5}
+              value={nextComment}
+              onChange={(e) => setNextComment(e.target.value)}
+            />
+          </FormGroup>
+        </Modal.Body>
+        ;
         <Modal.Footer>
           <Button
             variant="outline-dark"
             onClick={() => {
-              setNextcommnet(comment.comment);
+              setNextComment(comment.comment);
               setEditModalShow(false);
             }}
           >
             취소
           </Button>
           <Button variant="danger" onClick={handleUpdateButtonClick}>
-            삭제
+            저장
           </Button>
         </Modal.Footer>
       </Modal>
