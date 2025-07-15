@@ -4,6 +4,7 @@ import { Button, FloatingLabel, FormControl, Spinner } from "react-bootstrap";
 import { CommentList } from "./CommentList.jsx";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import { toast } from "react-toastify";
+import { IoIosSend } from "react-icons/io";
 
 export function CommentAdd({ boardId, isProcessing, setIsProcessing }) {
   const [comment, setComment] = useState("");
@@ -38,7 +39,7 @@ export function CommentAdd({ boardId, isProcessing, setIsProcessing }) {
   }
 
   return (
-    <div>
+    <div className="position-relative">
       <FloatingLabel
         controlId={"commentTextrarea1"}
         label={user === null ? "댓글을 작성해보세요" : "댓글을 작성해보세요"}
@@ -54,13 +55,15 @@ export function CommentAdd({ boardId, isProcessing, setIsProcessing }) {
           onChange={(e) => setComment(e.target.value)}
         />
       </FloatingLabel>
-      <Button
-        disabled={isProcessing || saveButtonDisabled}
-        onClick={handleCommentSaveClick}
-      >
-        {isProcessing && <Spinner size="sm" />}
-        댓글 저장
-      </Button>
+      <div className="position-absolute bottom-0 end-0 m-3">
+        <Button
+          disabled={isProcessing || saveButtonDisabled}
+          onClick={handleCommentSaveClick}
+        >
+          {isProcessing && <Spinner size="sm" />}
+          <IoIosSend />
+        </Button>
+      </div>
     </div>
   );
 }

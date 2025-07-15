@@ -1,7 +1,8 @@
-import { Col, Pagination, Row, Spinner, Table } from "react-bootstrap";
+import { Badge, Col, Pagination, Row, Spinner, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
+import { FaRegComment } from "react-icons/fa";
 
 export function BoardList() {
   const [boarList, setBoarList] = useState(null);
@@ -16,11 +17,6 @@ export function BoardList() {
         console.log("잘됨");
         setBoarList(res.data.boardList);
         setPageInfo(res.data.pageInfo);
-        console.log("boardList : " + res.data.boardList);
-        console.log("pageInfo : " + res.data.pageInfo);
-        console.log(
-          "pageInfo.leftPageNumber : " + res.data.pageInfo.leftPageNumber,
-        );
       })
       .catch((err) => {
         console.log("잘 안됨");
@@ -87,7 +83,21 @@ export function BoardList() {
                     onClick={() => handleTableRowClick(board.id)}
                   >
                     <td>{board.id}</td>
-                    <td>{board.title}</td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <span>{board.title}</span>
+                        <span>
+                          {board.countComment > 0 && (
+                            <Badge bg="light" text="dark">
+                              <div className="d-flex gap-1">
+                                <FaRegComment />
+                                <span>{board.countComment}</span>
+                              </div>
+                            </Badge>
+                          )}
+                        </span>
+                      </div>
+                    </td>
                     <td className="d-none d-md-table-cell">{board.nickName}</td>
                     <td className="d-none d-lg-table-cell">{board.timesAgo}</td>
                   </tr>

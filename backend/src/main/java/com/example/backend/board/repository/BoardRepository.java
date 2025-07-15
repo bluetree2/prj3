@@ -19,15 +19,19 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Query(value = """
             SELECT new com.example.backend.board.dto.BoardListDto(
                    b.id,
-                   b.title ,
+                   b.title,
                    m.nickName,
-                   b.insertedAt )
+                   b.insertedAt,
+                   COUNT(c))
             FROM Board b join Member m
-                        on b.author.email = m.email
+                on b.author.email = m.email
+                left join Comment c
+                on b.id = c.board.id
              WHERE b.title LIKE %:keyword%
-                           OR b.content LIKE %:keyword%
-                           OR m.nickName LIKE %:keyword%
-                        ORDER BY b.id DESC
+               OR b.content LIKE %:keyword%
+               OR m.nickName LIKE %:keyword%
+            group by b.id
+            ORDER BY b.id DESC
             """)
     Page<BoardListDto> findAllBy(String keyword, PageRequest pageRequest);
 

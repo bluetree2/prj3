@@ -119,6 +119,10 @@ export function BoardDetail() {
             </div>
           )}
 
+          <div className="mb-3">
+            <hr />
+          </div>
+
           {/*  댓글 컴포넌트 */}
           <CommentContainer boardId={board.id} />
         </Col>

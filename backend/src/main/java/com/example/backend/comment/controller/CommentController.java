@@ -23,6 +23,7 @@ public class CommentController {
     @PreAuthorize("isAuthenticated()")
     public void update(@RequestBody CommentForm commentForm,
                        Authentication authentication) {
+        System.out.println("commentForm = " + commentForm);
         commentService.update(commentForm, authentication);
     }
 
