@@ -57,6 +57,5 @@ public class CommentService {
         } else {
             throw new RuntimeException();
         }
-        ;
     }
 }
