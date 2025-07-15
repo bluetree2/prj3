@@ -26,14 +26,10 @@ public class CommentService {
 
 
     public void add(CommentForm comment, Authentication authentication) {
-        System.out.println("comment = " + comment);
-        System.out.println("authentication = " + authentication);
         if (authentication == null) {
-            System.out.println("권한 없음");
             throw new RuntimeException("권한이 없습니다.");
         }
         if (comment.getComment().trim().isBlank()) {
-            System.out.println("내용 없음");
             throw new RuntimeException("내용이 없는 댓글을 작성할 수 없습니다");
         }
 

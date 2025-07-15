@@ -17,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/api/comment")
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @GetMapping("board/{boardId}")
     public List<CommentListDto> list(@PathVariable Integer boardId) {
@@ -28,7 +28,6 @@ public class CommentController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> addComment(@RequestBody CommentForm comment,
                                         Authentication authentication) {
-        System.out.println("comment = " + comment);
         try {
             commentService.add(comment, authentication);
             return ResponseEntity.ok()
