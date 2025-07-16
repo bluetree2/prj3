@@ -14,7 +14,7 @@ export function LikeContainer({ boardId }) {
       axios
         .get(`/api/like/board/${boardId}`)
         .then((res) => {
-          console.log(res.data);
+          setLikeInfo(res.data);
         })
         .catch()
         .finally();
@@ -22,11 +22,17 @@ export function LikeContainer({ boardId }) {
   }, [isProcessing]);
 
   function handleHeartClick() {
+    setIsProcessing(true);
     axios
-      .post("/api/like", { boardId: boardId })
-      .then((res) => {})
-      .catch((err) => {})
+      .put("/api/like", { boardId: boardId })
+      .then((res) => {
+        console.log("good");
+      })
+      .catch((err) => {
+        console.log("fail");
+      })
       .finally(() => {
+        console.log("always");
         setIsProcessing(false);
       });
   }

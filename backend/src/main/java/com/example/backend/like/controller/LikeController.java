@@ -14,7 +14,7 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @GetMapping
+    @GetMapping("board/{boardId}")
     public BoardLikeDto get(
             @PathVariable("boardId") Integer boardId,
             Authentication authentication) {

@@ -31,23 +31,28 @@ public class LikeService {
         // 게시물 번호와 로그인이메일로 like 데이터 얻어서
         var boardLike = boardLikeRepository.findByBoardIdAndMemberEmail(
                 likeForm.getBoardId(), authentication.getName());
-        //있으면 insert
+
+        System.out.println("boardLike = " + boardLike);
+        System.out.println(boardLike.isPresent());
+
+        //있으면 delete
         if (boardLike.isPresent()) {
             boardLikeRepository.delete(boardLike.get());
+        } else {
+
+            //없으면 insert
+            BoardLike db = new BoardLike();
+            Board board = boardRepository.findById(likeForm.getBoardId()).get();
+            Member member = memberRepository.findById(authentication.getName()).get();
+            db.setBoard(board);
+            db.setMember(member);
+
+            BoardLikeId id = new BoardLikeId();
+            id.setBoardId(likeForm.getBoardId());
+            id.setMemberEmail(authentication.getName());
+            db.setId(id);
+            boardLikeRepository.save(db);
         }
-        //없으면 insert
-        BoardLike db = new BoardLike();
-        Board board = boardRepository.findById(likeForm.getBoardId()).get();
-        Member member = memberRepository.findById(authentication.getName()).get();
-        db.setBoard(board);
-        db.setMember(member);
-
-
-        BoardLikeId id = new BoardLikeId();
-        id.setBoardId(likeForm.getBoardId());
-        id.setMemberEmail(authentication.getName());
-        db.setId(id);
-        boardLikeRepository.save(db);
 
     }
 

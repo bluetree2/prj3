@@ -60,7 +60,9 @@ public class CommentService {
     }
 
     public void update(CommentForm commentForm, Authentication authentication) {
-        if (authentication == null) {
+        System.out.println("commentForm = " + commentForm);
+        System.out.println("authentication = " + (authentication == null));
+        if (authentication != null) {
             Comment comment = commentRepository.findById(commentForm.getId()).get();
             if (comment.getAuthor().getEmail().equals(authentication.getName())) {
                 comment.setComment(commentForm.getComment());

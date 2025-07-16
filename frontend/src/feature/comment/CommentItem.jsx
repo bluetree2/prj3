@@ -41,7 +41,7 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
   function handleUpdateButtonClick() {
     setIsProcessing(true);
     axios
-      .put(`/api/comment/`, {
+      .put(`/api/comment`, {
         id: comment.id,
         comment: nextComment,
       })
