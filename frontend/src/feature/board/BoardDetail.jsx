@@ -117,6 +117,7 @@ export function BoardDetail() {
               />
             </FormGroup>
           </div>
+          {console.log("access", hasAccess(board.authorEamil))}
           {hasAccess(board.authorEamil) && (
             <div>
               {/*  수정 삭제 버튼*/}

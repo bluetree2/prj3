@@ -47,8 +47,6 @@ export function AuthenticationContextProvider({ children }) {
       });
     }
   }, []);
-  // email
-  // nickName
 
   // login
   function login(token) {
@@ -73,6 +71,9 @@ export function AuthenticationContextProvider({ children }) {
 
   // hasAccess
   function hasAccess(email) {
+    console.log("email : ", email);
+    console.log("user email :", user.email);
+    console.log("email", user.email === email);
     return user && user.email === email;
   }
 
