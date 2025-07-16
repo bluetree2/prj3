@@ -81,4 +81,12 @@ CREATE TABLE board_like
     Foreign Key (member_email) References member (email)
 );
 
+#파일 테이블
+CREATE Table board_file
+(
+    board_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (board_id, name),
+    FOREIGN KEY (board_id) REFERENCES board (id)
+);
 

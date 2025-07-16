@@ -1,8 +1,6 @@
 package com.example.backend.board.controller;
 
-import com.example.backend.board.dto.BoardDto;
-import com.example.backend.board.dto.BoardListDto;
-import com.example.backend.board.dto.BoardListInfo;
+import com.example.backend.board.dto.*;
 import com.example.backend.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +24,16 @@ public class BoardController {
 
     @PutMapping("{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateBoard(@PathVariable Integer id, @RequestBody BoardDto dto,
+    public ResponseEntity<?> updateBoard(@PathVariable Integer id, @RequestBody BoardUpdateDto dto,
                                          Authentication authentication) {
+
+        System.out.println(dto);
+        System.out.println("추가 파일######");
+        dto.getFiles().foreach(boardFile -> {
+            System.out.println(boardFile.getOriginalFilename());
+        });
+        System.out.println("삭제 파일#######");
+        dto.getDeleteFiles().forEach(System.out::println);
 
         boolean result = boardService.validate(dto);
 
@@ -73,12 +79,10 @@ public class BoardController {
 
     @PostMapping("add")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> add(@RequestBody BoardDto dto,
+    public ResponseEntity<?> add(BoardAddForm dto,
                                  Authentication authentication) {
-
-
         // 값들이 유효한지 확인
-        boolean result = boardService.validate(dto);
+        boolean result = boardService.validateForAdd(dto);
 
         if (result) {
             // service에게 넘겨서 일 시키기

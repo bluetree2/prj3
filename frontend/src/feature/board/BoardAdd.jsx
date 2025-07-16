@@ -8,6 +8,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  ListGroup,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -16,17 +17,19 @@ import { AuthenticationContext } from "../../common/AuthenticationContextProvide
 export function BoardAdd() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [files, setFiles] = useState(null);
+  const { user } = useContext(AuthenticationContext);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const { user } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   function handleSaveButtonClick() {
     setIsProcessing(true);
     axios
-      .post("/api/board/add", {
+      .postForm("/api/board/add", {
         title: title,
         content: content,
+        files: files,
       })
       .then((res) => {
         const message = res.data.message;
@@ -84,6 +87,17 @@ export function BoardAdd() {
               rows={6}
               value={content}
               onChange={(e) => setContent(e.target.value)}
+            />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="files1">
+            <FormLabel>파일 첨부</FormLabel>
+            <FormControl
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => setFiles(e.target.files)}
             />
           </FormGroup>
         </div>
