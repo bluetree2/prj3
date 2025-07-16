@@ -60,7 +60,4 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     List<Board> findByAuthor(Member db);
 
-    void deleteByBoard(Board db);
-    //projection : 필요한 정보만 뽑아내느 것
-
 }
