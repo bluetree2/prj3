@@ -12,7 +12,7 @@ export function CommentContainer({ boardId }) {
   useEffect(() => {
     if (!isProcessing) {
       axios
-        .get(`/api/board/${boardId}`)
+        .get(`/api/comment/board/${boardId}`)
         .then((res) => {
           setCommentList(res.data);
         })
