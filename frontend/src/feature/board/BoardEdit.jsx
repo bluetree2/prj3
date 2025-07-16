@@ -1,12 +1,17 @@
 import {
   Button,
   Col,
+  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
+  Image,
+  ListGroup,
+  ListGroupItem,
   Modal,
   Row,
   Spinner,
+  Stack,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,6 +20,8 @@ import { toast } from "react-toastify";
 
 export function BoardEdit() {
   const [board, setBoard] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [deleteFiles, setDeleteFiles] = useState([]);
   const [searchParams] = useSearchParams();
   const [modalShow, setModalShow] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -37,7 +44,11 @@ export function BoardEdit() {
   function handleSaveButtonClick() {
     setIsProcessing(true);
     axios
-      .put(`/api/board/${searchParams.get("id")}`, board)
+      .put(`/api/board/${searchParams.get("id")}`, {
+        ...board,
+        files: files,
+        deleteFiles: deleteFiles,
+      })
       .then((res) => {
         console.log("good2");
         const message = res.data.message;
@@ -97,11 +108,41 @@ export function BoardEdit() {
           </FormGroup>
         </div>
         <div>
+          {/*   파일 목록 보기   */}
+          <ListGroup>
+            {board.files.map((file) => (
+              <ListGroupItem key={file.name}>
+                <Stack direction={"horizontal"} gap={3}>
+                  <FormCheck type="switch" onChange={() => setBoard({})} />
+                  if (e.target.checked)
+                  {setDelteFiles(
+                    delteFiles.filter((item) => item !== e.target.value),
+                  )}
+                  else{setDelete}
+                  <Image fluid src={file.path} />
+                </Stack>
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="files1">
+            <FormLabel>추가 이미지 파일</FormLabel>
+            <FormControl
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => setFiles(e.target.files)}
+            />
+          </FormGroup>
+        </div>
+        <div>
           <FormGroup className="mb-3" controlId="author1">
             <FormLabel>작성자</FormLabel>
             <FormControl value={board.authorNickName} disabled />
           </FormGroup>
         </div>
+        <div></div>
         <div>
           <Button
             className="me-2"
