@@ -23,13 +23,16 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
                    m.nickName,
                    b.insertedAt,
                    COUNT(DISTINCT c),
-                   COUNT(distinct l))
+                   COUNT(distinct l),
+                    COUNT(DISTINCT f))
             FROM Board b join Member m
                 on b.author.email = m.email
                 left join Comment c
                 on b.id = c.board.id
                 left join BoardLike l
                 on b.id = l.board.id
+                LEFT JOIN BoardFile f
+                ON b.id = f.board.id
              WHERE b.title LIKE %:keyword%
                OR b.content LIKE %:keyword%
                OR m.nickName LIKE %:keyword%

@@ -91,6 +91,8 @@ export function BoardList() {
                     <td>
                       <div className="d-flex gap-2">
                         <span>{board.title}</span>
+
+                        {/*댓글 갯수*/}
                         <span>
                           {board.countComment > 0 && (
                             <Badge bg="light" text="dark">
