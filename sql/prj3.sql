@@ -71,4 +71,14 @@ CREATE TABLE comment
     FOREIGN KEY (board_id) REFERENCES board (id)
 );
 
+# 좋아요 테이블
+CREATE TABLE board_like
+(
+    board_id     INT          NOT NULL,
+    member_email VARCHAR(255) NOT NULL,
+    PRIMARY KEY (member_email, board_id),
+    Foreign Key (board_id) References board (id),
+    Foreign Key (member_email) References member (email)
+);
+
 
