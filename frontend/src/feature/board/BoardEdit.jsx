@@ -113,13 +113,20 @@ export function BoardEdit() {
             {board.files.map((file) => (
               <ListGroupItem key={file.name}>
                 <Stack direction={"horizontal"} gap={3}>
-                  <FormCheck type="switch" onChange={() => setBoard({})} />
-                  if (e.target.checked)
-                  {setDelteFiles(
-                    delteFiles.filter((item) => item !== e.target.value),
-                  )}
-                  else{setDelete}
-                  <Image fluid src={file.path} />
+                  <FormCheck
+                    type="switch"
+                    value={file.name}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setDeleteFiles([...deleteFiles, e.target.value]);
+                      } else {
+                        setDeleteFiles(
+                          deleteFiles.filter((item) => item !== e.target.value),
+                        );
+                      }
+                    }}
+                  />
+                  <Image fluid src={file.path} />;
                 </Stack>
               </ListGroupItem>
             ))}

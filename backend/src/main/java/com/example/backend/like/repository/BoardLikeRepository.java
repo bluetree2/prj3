@@ -3,6 +3,7 @@ package com.example.backend.like.repository;
 import com.example.backend.Board;
 import com.example.backend.like.entity.BoardLike;
 import com.example.backend.like.entity.BoardLikeId;
+import com.example.backend.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,4 +13,8 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, BoardLikeI
     Optional<BoardLike> findByBoardIdAndMemberEmail(Integer boardId, String email);
 
     Long countByBoardId(Integer boardId);
+
+    void deleteByBoard(Board board);
+
+    void deleteByMember(Member db);
 }

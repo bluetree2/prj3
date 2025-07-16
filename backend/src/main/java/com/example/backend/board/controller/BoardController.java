@@ -3,14 +3,12 @@ package com.example.backend.board.controller;
 import com.example.backend.board.dto.*;
 import com.example.backend.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 //@Controller
@@ -24,18 +22,20 @@ public class BoardController {
 
     @PutMapping("{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateBoard(@PathVariable Integer id, @RequestBody BoardUpdateDto dto,
+    public ResponseEntity<?> updateBoard(@PathVariable Integer id,
+                                         BoardUpdateForm dto,
                                          Authentication authentication) {
-
+        /*
         System.out.println(dto);
         System.out.println("추가 파일######");
-        dto.getFiles().foreach(boardFile -> {
+        dto.getFiles().forEach(boardFile -> {
             System.out.println(boardFile.getOriginalFilename());
         });
-        System.out.println("삭제 파일#######");
-        dto.getDeleteFiles().forEach(System.out::println);
+        System.out.println("삭제 파일######");
+        Arrays.stream(dto.getDeleteFiles()).forEach(System.out::println);
+        */
 
-        boolean result = boardService.validate(dto);
+        boolean result = boardService.validateForUpdate(dto);
 
         if (result) {
             boardService.update(dto, authentication);
