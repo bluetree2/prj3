@@ -27,10 +27,12 @@ export function CommentContainer({ boardId }) {
 
   return (
     <div>
-      <span>
-        <TfiWrite />
-        <h4 className="mb-3">댓글 ({commentList.length})</h4>
-      </span>
+      <h4 className="mb-3 d-flex gep-2">
+        <span>
+          <TfiWrite />
+        </span>
+        <span>댓글 ({commentList.length})</span>
+      </h4>
       <CommentAdd
         boardId={boardId}
         isProcessing={isProcessing}

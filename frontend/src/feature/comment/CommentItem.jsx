@@ -26,10 +26,10 @@ export function CommentItem({ comment, isProcessing, setIsProcessing }) {
     setIsProcessing(true);
     axios
       .delete(`/api/comment/${comment.id}`)
-      .then((res) => {
+      .then(() => {
         toast("댓글이 삭제 되었습니다.", { type: "success" });
       })
-      .catch((err) => {
+      .catch(() => {
         toast("댓글 삭제 중 문제가 발생하여습니다.", { type: "error" });
       })
       .finally(() => {

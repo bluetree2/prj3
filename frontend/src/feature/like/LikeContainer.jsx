@@ -1,11 +1,23 @@
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function LikeContainer({ boardId }) {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // const [likeCount, setLikeCount] = useState(0);
+
+  useEffect(() => {
+    if (!isProcessing) {
+      axios
+        .get(`/api/like/board/${boardId}`)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch()
+        .finally();
+    }
+  }, []);
 
   function handleHeartClick() {
     axios
@@ -21,10 +33,9 @@ export function LikeContainer({ boardId }) {
   return (
     <div className="d-flex gap-2 h2">
       <div onClick={handleHeartClick}>
-        <GoHeart />
-        <GoHeartFill />
+        {likeInfo.liked ? <GoHeartFill /> : <GoHeart />}
       </div>
-      <div>9</div>
+      <div>{likeInfo.count}</div>
     </div>
   );
 }

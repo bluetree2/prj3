@@ -5,6 +5,7 @@ export function CommentList({ commentList, isProcessing, setIsProcessing }) {
     <div>
       {console.log("commentList : ", commentList, "type", typeof commentList)}
       {console.log(Array.isArray(commentList))}
+      {console.log(commentList.map())}
       {/* todo : commentList.map is not a function at CommentList*/}
       {commentList.map((comment) => (
         <CommentItem
