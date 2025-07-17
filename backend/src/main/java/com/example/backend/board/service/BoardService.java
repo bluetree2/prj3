@@ -18,11 +18,18 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.support.PageableUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -42,6 +49,41 @@ public class BoardService {
     private final CommentRepository commentRepository;
     private final BoardFileRepository boardFileRepository;
     private final BoardLikeRepository boardLikeRepository;
+    private final S3Client s3client;
+
+    @Value("${image.prefix}")
+    private String imagePrefix;
+    @Value("${aws.s3.bucket.name")
+    private String bucketName;
+
+    private void deleteFile(String objectKey) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest
+                .builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .build();
+        s3client.deleteObject(deleteObjectRequest);
+    }
+
+    private void uploadFile(MultipartFile file, String objectKey) {
+        try {
+
+            PutObjectRequest putObjectRequest = PutObjectRequest
+                    .builder()
+                    .bucket(bucketName)
+                    .key(objectKey)
+                    .acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
+
+            s3client
+                    .putObjcet(putObjectRequest,
+                            RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+    }
 
     public void add(BoardAddForm dto, Authentication authentication) {
 
@@ -84,39 +126,10 @@ public class BoardService {
                     // repository로 저장
                     boardFileRepository.save(boardFile);
 
-                    // 실제 파일 disk에 저장
-                    // todo : aws s3 에 저장을 변경할 예정
-                    // 1. c:/Temp/prj3/boardFile 에 게시물 번호 폴더 만들고
-                    /// c:/Temp/prj3/boardFile/2002sd
-                    File folder = new File("C:/Temp/prj3/boardFile/" + board.getId());
-                    if (!folder.exists()) {
-                        folder.mkdirs();
-                    }
-
-                    // 2. 그 폴더에 파일 저장
-                    /// c:/Temp/prj3/boardFile/2002
-
-                    try {
-
-                        BufferedInputStream bi = new BufferedInputStream(file.getInputStream());
-                        BufferedOutputStream bo =
-                                new BufferedOutputStream(new FileOutputStream(
-                                        new File(folder, file.getOriginalFilename())));
-                        try (bi; bo) {
-                            byte[] b = new byte[1024];
-                            int len;
-                            while ((len = bi.read(b)) != -1) {
-                                bo.write(b, 0, len);
-                            }
-                            bo.flush();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
+                    // 실제 파일 aws s3에 저장
+                    String objectKey = "prj3/board/" + board.getId() + "/" + file.getOriginalFilename();
+                    uploadFile(file, objectKey);
                 }
-
-                // todo :
             }
         }
     }
@@ -170,7 +183,8 @@ public class BoardService {
         for (BoardFile boardFile : fileList) {
             BoardFileDto fileDto = new BoardFileDto();
             fileDto.setName(boardFile.getId().getName());
-            fileDto.setPath("http://localhost:8081/boardFile/" + id + "/" + boardFile.getId().getName());
+//            fileDto.setPath("http://localhost:8081/boardFile/" + id + "/" + boardFile.getId().getName());
+            fileDto.setPath(imagePrefix + "prj3/board/" + id + "/" + boardFile.getId().getName());
             files.add(fileDto);
         }
 
@@ -196,6 +210,15 @@ public class BoardService {
         if (db.getAuthor().getEmail().equals(authentication.getName())) {
             // 좋아요
             boardLikeRepository.deleteByBoard(db);
+            // s3의 파일
+            ///  1. 파일 목록 얻고
+            List<String> fileNames = boardFileRepository.listFileNameByBoard(db);
+            /// 2. 실제 파일 지우기
+            for (String fileName : fileNames) {
+                String objectKey = "prj3/board/" + db.getId() + "/" + fileName;
+                deleteFile(objectKey);
+            }
+
             // 파일
             boardLikeRepository.deleteByBoard(db);
             // 댓글
@@ -251,11 +274,10 @@ public class BoardService {
                 boardFileId.setBoardId(db.getId());
                 boardFileId.setName(file);
                 boardFileRepository.deleteById(boardFileId);
-                // C:/Temp/prj3/boardFile/2324/tiger.jpg 지우고
-                File targetfile = new File("C:/Temp/prj3/boardFile/" + db.getId() + "/" + file);
-                if (targetfile.exists()) {
-                    targetfile.delete();
-                }
+
+                // s3의 파일 지우기
+                String objectKey = "prj3/board/" + db.getId() + "/" + file;
+                deleteFile(objectKey);
             }
         }
     }

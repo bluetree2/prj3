@@ -2,6 +2,7 @@ package com.example.backend.member.service;
 
 import com.example.backend.Board;
 import com.example.backend.board.repository.BoardRepository;
+import com.example.backend.board.service.BoardService;
 import com.example.backend.comment.repository.CommentRepository;
 import com.example.backend.like.repository.BoardLikeRepository;
 import com.example.backend.member.dto.*;
@@ -10,6 +11,7 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.AuthRepository;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -32,6 +34,7 @@ public class MemberService {
     private final JwtEncoder jwtEncoder;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    private final BoardService boardService;
     private final AuthRepository authRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
@@ -106,7 +109,7 @@ public class MemberService {
 
     }
 
-    public void delete(MemberForm memberForm) {
+    public void delete(MemberForm memberForm, Authentication authentication) {
         Member db = memberRepository.findById(memberForm.getEmail()).get();
 //        if (db.getPassword().equals(memberForm.getPassword())) {
         // matches(평문,인코딩문)
@@ -122,7 +125,13 @@ public class MemberService {
             }
 
             // 회원이 쓴 게시물 지우기
-            boardRepository.deleteByAuthor(db);
+            /// 1. 회원이 쓴 게시물 번호 목록을 얻고
+            List<Integer> boardIdList = boardRepository.listBoardIdByAuthor(db);
+            /// 2. 번호 목록을 탐색해서 boardService의 deleteById의 메소드 호출
+            for (Integer boardId : boardIdList) {
+                boardService.deleteById(boardId, authentication);
+            }
+
             // 좋아요 지우기
             boardLikeRepository.deleteByMember(db);
             // 회원 정보 지우기

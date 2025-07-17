@@ -65,7 +65,10 @@ export function BoardAdd() {
   if (content.trim() === "") {
     validata = false;
   }
-
+  if (!user) {
+    return <Spinner />;
+  }
+  
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>

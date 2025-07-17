@@ -89,7 +89,7 @@ public class MemberController {
         }
 
         try {
-            memberService.delete(memberForm);
+            memberService.delete(memberForm, authentication);
 
         } catch (Exception e) {
             e.printStackTrace();

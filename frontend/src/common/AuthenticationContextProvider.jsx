@@ -43,6 +43,7 @@ export function AuthenticationContextProvider({ children }) {
           // nickname
           email: res.data.email,
           nickName: res.data.nickName,
+          scope: payload.scp.split(" "),
         });
       });
     }
