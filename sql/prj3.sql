@@ -49,13 +49,13 @@ values ('qwe', 'asd', '99@99.com'),
        ('456', 'rty', '99@99.com'),
        ('fgh', 'vbn', '88@88.com'),
        ('789', 'uio', '88@88.com'),
-       ('jkl', 'nmp', '88@88.com')
+       ('jkl', 'nmp', '88@88.com');
 
 
 # 페이지 테스트용 데이터
 INSERT INTO board
-(title, content, author)
-select  title, content, board.author
+    (title, content, author)
+select title, content, board.author
 From board;
 
 # 댓글 테이블
@@ -84,8 +84,8 @@ CREATE TABLE board_like
 #파일 테이블
 CREATE Table board_file
 (
-    board_id INT NOT NULL,
-    name VARCHAR(255) NOT NULL,
+    board_id INT          NOT NULL,
+    name     VARCHAR(255) NOT NULL,
     PRIMARY KEY (board_id, name),
     FOREIGN KEY (board_id) REFERENCES board (id)
 );
