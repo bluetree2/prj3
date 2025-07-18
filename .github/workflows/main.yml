@@ -42,7 +42,7 @@ jobs:
       # deploy to ec2
       - name: save ssh key file
         run: |
-          echo "${{secrets.KEY250717_PEM}}" > key.pem
+          echo "${{secrets.PRJ3_PEM}}" > key.pem
           chmod 600 key.pem
 
       - name: upload jar to ec2
