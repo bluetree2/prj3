@@ -42,11 +42,17 @@ export function CommentAdd({ boardId, isProcessing, setIsProcessing }) {
     <div className="position-relative">
       <FloatingLabel
         controlId={"commentTextrarea1"}
-        label={user === null ? "댓글을 작성해보세요" : "댓글을 작성해보세요"}
+        label={
+          user === null
+            ? "댓글을 작성하려면 로그인하세요 "
+            : "댓글을 작성해보세요"
+        }
       >
         <FormControl
           placeholder={
-            user === null ? "댓글을 작성해보세요" : "댓글을 작성해보세요"
+            user === null
+              ? "댓글을 작성하려면 로그인하세요"
+              : "댓글을 작성해보세요"
           }
           as={"textarea"}
           style={{ height: "150px" }}
