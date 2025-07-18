@@ -24,8 +24,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.support.PageableUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
@@ -53,7 +53,7 @@ public class BoardService {
 
     @Value("${image.prefix}")
     private String imagePrefix;
-    @Value("${aws.s3.bucket.name")
+    @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
     private void deleteFile(String objectKey) {
@@ -76,7 +76,7 @@ public class BoardService {
                     .build();
 
             s3client
-                    .putObjcet(putObjectRequest,
+                    .putObject(putObjectRequest,
                             RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
         } catch (Exception e) {
             e.printStackTrace();

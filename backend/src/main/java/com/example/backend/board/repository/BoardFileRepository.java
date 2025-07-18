@@ -4,6 +4,7 @@ import com.example.backend.Board;
 import com.example.backend.board.entity.BoardFile;
 import com.example.backend.board.entity.BoardFileId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
