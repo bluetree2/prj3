@@ -94,8 +94,6 @@ export function BoardDetail() {
             <ListGroup>
               {board.files.map((file) => (
                 <ListGroupItem key={file.name}>
-                  {console.log("filename", file.name)}
-                  {console.log("filepath", file.path)}
                   <Image fluid src={file.path} />
                 </ListGroupItem>
               ))}

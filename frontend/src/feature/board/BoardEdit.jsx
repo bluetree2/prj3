@@ -45,7 +45,7 @@ export function BoardEdit() {
   function handleSaveButtonClick() {
     setIsProcessing(true);
     axios
-      .put(`/api/board/${searchParams.get("id")}`, {
+      .putForm(`/api/board/${searchParams.get("id")}`, {
         ...board,
         files: files,
         deleteFiles: deleteFiles,

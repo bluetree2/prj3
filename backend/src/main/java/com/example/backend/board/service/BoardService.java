@@ -295,6 +295,7 @@ public class BoardService {
     }
 
     public boolean validateForUpdate(BoardUpdateForm dto) {
+        System.out.println("dto = " + dto);
         if (dto.getTitle() == null || dto.getTitle().trim().isBlank()) {
             return false;
         }
